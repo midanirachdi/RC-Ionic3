@@ -1,0 +1,36 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title text-center>Refugees Camp</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content text-center padding>
+  <ion-list>
+  <img block class="mTopAndWidth" text-center src="assets/imgs/logoRC.png"/>
+
+    <ion-item>
+      <ion-label floating>Username</ion-label>
+      <ion-input [(ngModel)]="username" type="text" value=""></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input [(ngModel)]="password"  type="password" value=""></ion-input>
+    </ion-item>
+
+
+
+  </ion-list>
+  <div padding text-center>
+    <button ion-button outline primary  large  (click)="login()">Sign In</button>
+  </div>
+</ion-content>

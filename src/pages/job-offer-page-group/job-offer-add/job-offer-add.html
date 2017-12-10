@@ -1,0 +1,72 @@
+<!--
+  Generated template for the JobOfferAddPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>jobOfferAdd</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form [formGroup]="jobofferForm" (ngSubmit)="submitForm()">
+    <ion-item>
+      <ion-label floating>Title</ion-label >
+      <ion-input required type="text" formControlName="title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Description</ion-label >
+      <ion-textarea required formControlName="desc"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Contact name</ion-label >
+      <ion-input required type="text" formControlName="contactN"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Contact email</ion-label >
+      <ion-input required type="text" formControlName="contactE"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Contact number</ion-label >
+      <ion-input required type="number" formControlName="contactNumber"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Company name</ion-label >
+      <ion-input required type="text" formControlName="companyN"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Company Address</ion-label >
+      <ion-input required type="text" formControlName="companyA"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Begin date</ion-label >
+      <ion-datetime required formControlName="bd" displayFormat="YYYY-MM-DD" pickerFormat="YYYY-MM-DD" >
+      </ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>End date</ion-label >
+      <ion-datetime required formControlName="ed" displayFormat="YYYY-MM-DD" pickerFormat="YYYY-MM-DD" >
+      </ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Field of work</ion-label >
+      <ion-input required type="text" formControlName="fow"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Salary estimate</ion-label >
+      <ion-input required  type="text" type="number" formControlName="salaryE"></ion-input>
+    </ion-item>
+
+
+    <div text-center class="mTop">
+    <button ion-button  type="submit" [disabled]="!jobofferForm.valid">Submit</button>
+      <button ion-button color="danger" (click)="onClose()">Close</button>
+    </div>
+  </form>
+
+</ion-content>
