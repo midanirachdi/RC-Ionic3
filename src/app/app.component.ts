@@ -1,3 +1,4 @@
+import { RefugeesPage } from './../pages/refugees/refugees';
 import {Component, ViewChild} from '@angular/core';
 import {MenuController, NavController, Platform} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -15,6 +16,7 @@ export class MyApp {
 loginPage=LoginPage;
   tabsPage=TabsPage;
   joboffersPage=JobOffersPage;
+  refugeesPage=RefugeesPage;
   @ViewChild('nav') nav:NavController;
 
   onLoad(page:any){

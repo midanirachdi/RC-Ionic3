@@ -18,6 +18,8 @@ import {JobOfferPage} from "../pages/job-offer-page-group/job-offer/job-offer";
 import {LoginPage} from "../pages/login/login";
 import {JobOfferAddPage} from "../pages/job-offer-page-group/job-offer-add/job-offer-add";
 import {RefugeeListJobOffersPage} from "../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers";
+import { RefugeesPage } from '../pages/refugees/refugees';
+import { RefugeesService } from '../services/refugees.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import {RefugeeListJobOffersPage} from "../pages/job-offer-page-group/refugee-li
     TabsPage,
     LoginPage,
     JobOfferAddPage,
-    RefugeeListJobOffersPage
+    RefugeeListJobOffersPage,
+    RefugeesPage
   ],
   imports: [
     BrowserModule,
@@ -49,14 +52,16 @@ import {RefugeeListJobOffersPage} from "../pages/job-offer-page-group/refugee-li
     TabsPage,
     LoginPage,
     JobOfferAddPage,
-    RefugeeListJobOffersPage
+    RefugeeListJobOffersPage,
+    RefugeesPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     NativeGeocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    JobofferService
+    JobofferService,
+    RefugeesService
   ]
 })
 export class AppModule {}

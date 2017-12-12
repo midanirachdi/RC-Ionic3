@@ -1,0 +1,34 @@
+<!--
+  Generated template for the RefugeesPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+      <ion-buttons>
+          <button ion-button menuToggle style="color:white">
+            <ion-icon name="menu"></ion-icon>
+          </button>
+        </ion-buttons>
+    <ion-title>Refugees List</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+    <ion-card padding *ngFor="let r of filtredRefugees">
+        <ion-card-header >
+          <h2>{{r.firstname}} {{r.lastName}}</h2>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p>Gender: {{r.sex }} <br>
+              Date of birth: {{r.dateOfBirth}}
+          </p>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
