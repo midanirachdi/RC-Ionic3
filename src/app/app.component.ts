@@ -1,18 +1,26 @@
-import {Component} from '@angular/core';
-import {MenuController, Platform} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {MenuController, NavController, Platform} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {HomePage} from "../pages/home/home";
 import {TabsPage} from "../pages/tabs/tabs";
+import {LoginPage} from "../pages/login/login";
+import {JobOffersPage} from "../pages/job-offer-page-group/job-offers/job-offers";
 
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = HomePage;
 
+loginPage=LoginPage;
   tabsPage=TabsPage;
+  joboffersPage=JobOffersPage;
+  @ViewChild('nav') nav:NavController;
+
+  onLoad(page:any){
+    this.nav.setRoot(page);
+    this.menuCtrl.close();
+  }
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,
               private menuCtrl:MenuController) {

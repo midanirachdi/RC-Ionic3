@@ -21,7 +21,7 @@ export class JobofferService {
 
 
 //http://10.0.2.2:18080/ emulated device
-  //192.168.100.107 normal device
+  //localhost : google chrome port forwarding
   url = "http://localhost:18080/refugeesCamp-web/api/joboffers";
   urlGEO= "https://maps.googleapis.com/maps/api/geocode/json?address=";
   urlUserService = "http://localhost:18080/refugeesCamp-web/api/users";

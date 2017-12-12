@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {TabsPage} from "../tabs/tabs";
 
 
 
@@ -20,4 +21,5 @@ export class HomePage {
   {
 
   }
+
 }

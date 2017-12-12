@@ -1,1 +1,24 @@
-<ion-nav [root]="tabsPage"></ion-nav>
+<ion-menu [content]="nav">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Main menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="onLoad(tabsPage)">
+        <ion-icon name="home" item-left></ion-icon>
+        Home
+      </button>
+      <button ion-item (click)="onLoad(joboffersPage)">
+        <ion-icon name="briefcase" item-left></ion-icon>
+        Job offers
+      </button>
+
+    </ion-list>
+  </ion-content>
+  <ion-footer>
+    <page-tabs></page-tabs>
+  </ion-footer>
+</ion-menu>
+<ion-nav [root]="loginPage" #nav></ion-nav>

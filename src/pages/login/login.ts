@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, Platform, ViewController} from 'ionic-angular';
 import {Http} from "@angular/http";
 import {HomePage} from "../home/home";
+import {TabsPage} from "../tabs/tabs";
+import {JobOffersPage} from "../job-offer-page-group/job-offers/job-offers";
 
 /**
  * Generated class for the LoginPage page.
@@ -25,8 +27,8 @@ export class LoginPage {
   login() {
 
         //Navigate to home page
-        //this.nav.setRoot(HomePage);
-        this.nav.parent.select(2);
+        this.nav.setRoot(TabsPage);
+        //this.nav.parent.select(3);
   }
 
 

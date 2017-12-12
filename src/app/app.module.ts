@@ -18,6 +18,7 @@ import {JobOfferPage} from "../pages/job-offer-page-group/job-offer/job-offer";
 import {LoginPage} from "../pages/login/login";
 import {JobOfferAddPage} from "../pages/job-offer-page-group/job-offer-add/job-offer-add";
 import {RefugeeListJobOffersPage} from "../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers";
+
 @NgModule({
   declarations: [
     MyApp,
