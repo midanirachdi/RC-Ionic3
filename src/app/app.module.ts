@@ -4,6 +4,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
+import { Facebook } from '@ionic-native/facebook';
+
 import { MyApp } from './app.component';
 import {HttpModule} from "@angular/http";
 import {NativeGeocoder} from "@ionic-native/native-geocoder";
@@ -13,7 +15,7 @@ import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 import {JobOffersPage} from "../pages/job-offer-page-group/job-offers/job-offers";
 import {TabsPage} from "../pages/tabs/tabs";
 import {JobofferService} from "../services/joboffer.service";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClientModule,HTTP_INTERCEPTORS} from "@angular/common/http";
 import {JobOfferPage} from "../pages/job-offer-page-group/job-offer/job-offer";
 import {LoginPage} from "../pages/login/login";
 import {JobOfferAddPage} from "../pages/job-offer-page-group/job-offer-add/job-offer-add";
@@ -24,6 +26,9 @@ import {CoursePage} from "../pages/course-group/course/course";
 import {CoursesPage} from "../pages/course-group/courses/courses";
 import {AddCoursePage} from "../pages/course-group/add-course/add-course";
 import {CourseService} from "../services/course.service";
+import {UserService} from '../services/user.service';
+import {AuthService} from '../services/auth.service';
+import { jwtInterceptor } from '../security/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -66,13 +71,21 @@ import {CourseService} from "../services/course.service";
     AddCoursePage
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: jwtInterceptor,
+      multi: true
+    },
     StatusBar,
     SplashScreen,
     NativeGeocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     JobofferService,
     RefugeesService,
-    CourseService
+    CourseService,
+    AuthService,
+    UserService,
+    Facebook
   ]
 })
 export class AppModule {}
