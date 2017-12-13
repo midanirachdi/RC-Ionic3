@@ -21,6 +21,9 @@ import {CoursesPage} from "../courses/courses";
   templateUrl: 'course.html',
 })
 export class CoursePage implements OnInit{
+
+  filtreCourses: Course[];
+
   courses : Course[];
 
 
@@ -35,6 +38,7 @@ export class CoursePage implements OnInit{
     this.cs.getAll().subscribe(
       (courses: Course[]) => {
         this.courses = courses;
+        this.filtreCourses = courses
 
       }
     );
@@ -66,6 +70,10 @@ export class CoursePage implements OnInit{
 
   ionViewDidLoad() {
      // console.log('ionViewDidLoad CoursePage');
+  }
+
+  getItems(event: any){
+    this.filtreCourses = this.courses.filter(x => x.name.toUpperCase().startsWith(event.target.value.toUpperCase()));
   }
 
 }

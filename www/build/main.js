@@ -549,11 +549,11 @@ webpackEmptyAsyncContext.id = 188;
 
 var map = {
 	"../pages/course-group/add-course/add-course.module": [
-		718,
+		717,
 		11
 	],
 	"../pages/course-group/course/course.module": [
-		717,
+		718,
 		10
 	],
 	"../pages/course-group/courses/courses.module": [
@@ -573,11 +573,11 @@ var map = {
 		6
 	],
 	"../pages/job-offer-page-group/job-offers/job-offers.module": [
-		724,
+		723,
 		5
 	],
 	"../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers.module": [
-		723,
+		724,
 		4
 	],
 	"../pages/login/login.module": [
@@ -585,11 +585,11 @@ var map = {
 		3
 	],
 	"../pages/refugees/refugees.module": [
-		726,
+		727,
 		2
 	],
 	"../pages/tabs/tabs.module": [
-		727,
+		726,
 		1
 	]
 };
@@ -746,17 +746,17 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_6__angular_http__["b" /* HttpModule */],
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* MyApp */], {}, {
                     links: [
-                        { loadChildren: '../pages/course-group/course/course.module#CoursePageModule', name: 'CoursePage', segment: 'course', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/course-group/add-course/add-course.module#AddCoursePageModule', name: 'AddCoursePage', segment: 'add-course', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/course-group/course/course.module#CoursePageModule', name: 'CoursePage', segment: 'course', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/course-group/courses/courses.module#CoursesPageModule', name: 'CoursesPage', segment: 'courses', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-offer-page-group/job-offer-add/job-offer-add.module#JobOfferAddPageModule', name: 'JobOfferAddPage', segment: 'job-offer-add', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-offer-page-group/job-offer/job-offer.module#JobOfferPageModule', name: 'JobOfferPage', segment: 'job-offer', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers.module#RefugeeListJobOffersPageModule', name: 'RefugeeListJobOffersPage', segment: 'refugee-list-job-offers', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-offer-page-group/job-offers/job-offers.module#JobOffersPageModule', name: 'JobOffersPage', segment: 'job-offers', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers.module#RefugeeListJobOffersPageModule', name: 'RefugeeListJobOffersPage', segment: 'refugee-list-job-offers', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/refugees/refugees.module#RefugeesPageModule', name: 'RefugeesPage', segment: 'refugees', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/refugees/refugees.module#RefugeesPageModule', name: 'RefugeesPage', segment: 'refugees', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_9__agm_core__["a" /* AgmCoreModule */].forRoot({
@@ -1047,6 +1047,7 @@ var CoursePage = (function () {
         var _this = this;
         this.cs.getAll().subscribe(function (courses) {
             _this.courses = courses;
+            _this.filtreCourses = courses;
         });
         if (this.cs.courseAdd) {
             this.cs.courseAdd.subscribe(function (c) {
@@ -1072,9 +1073,12 @@ var CoursePage = (function () {
     CoursePage.prototype.ionViewDidLoad = function () {
         // console.log('ionViewDidLoad CoursePage');
     };
+    CoursePage.prototype.getItems = function (event) {
+        this.filtreCourses = this.courses.filter(function (x) { return x.name.toUpperCase().startsWith(event.target.value.toUpperCase()); });
+    };
     CoursePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-course',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/course-group/course/course.html"*/'<!--\n  Generated template for the CoursePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-buttons>\n      <button ion-button menuToggle style="color:white">\n        <ion-icon name="menu"></ion-icon>\n      </button>\n    </ion-buttons>\n\n    <ion-title>course</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n\n\n  <button class="mLeft" (click)="onAddC()" ion-button small outline item-end icon-left>\n    <ion-icon name="add-circle"></ion-icon>\n    Add Course\n  </button>\n\n\n  <ion-card padding *ngFor="let c of courses">\n    <ion-card-header >\n      {{c.name}}\n    </ion-card-header>\n\n    <ion-row>\n      <ion-col text-right>\n\n        <button\n          ion-button\n          color="default"\n          outline\n          round\n          small (click)="onViewC(c)">\n          Details</button>\n\n        <button\n          ion-button\n          outline\n          round\n          small\n          color="danger" (click)="onDeleteC(c)">Delete</button>\n      </ion-col>\n    </ion-row>\n\n  </ion-card>\n\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/course-group/course/course.html"*/,
+            selector: 'page-course',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/course-group/course/course.html"*/'<!--\n  Generated template for the CoursePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-buttons>\n      <button ion-button menuToggle style="color:white">\n        <ion-icon name="menu"></ion-icon>\n      </button>\n    </ion-buttons>\n\n    <ion-title>course</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n\n\n\n  <button class="mLeft" (click)="onAddC()" ion-button small outline item-end icon-left>\n    <ion-icon name="add-circle"></ion-icon>\n    Add Course\n  </button>\n  <!--//////-->\n  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n\n  <!--/////-->\n\n  <ion-card padding *ngFor="let c of filtreCourses">\n    <ion-card-header >\n      {{c.name}}\n    </ion-card-header>\n\n    <ion-row>\n      <ion-col text-right>\n\n        <button\n          ion-button\n          color="default"\n          outline\n          round\n          small (click)="onViewC(c)">\n          Details</button>\n\n        <button\n          ion-button\n\n          round\n          small\n          color="danger" (click)="onDeleteC(c)">  <ion-icon name="trash"></ion-icon>\n          Delete</button>\n      </ion-col>\n    </ion-row>\n\n  </ion-card>\n\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/course-group/course/course.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_course_service__["a" /* CourseService */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* ModalController */],
