@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {TabsPage} from "../pages/tabs/tabs";
 import {LoginPage} from "../pages/login/login";
 import {JobOffersPage} from "../pages/job-offer-page-group/job-offers/job-offers";
+import {CoursePage} from "../pages/course-group/course/course";
 
 
 @Component({
@@ -17,6 +18,9 @@ loginPage=LoginPage;
   tabsPage=TabsPage;
   joboffersPage=JobOffersPage;
   refugeesPage=RefugeesPage;
+  coursesPage= CoursePage;
+
+
   @ViewChild('nav') nav:NavController;
 
   onLoad(page:any){

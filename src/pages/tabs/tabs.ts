@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {HomePage} from "../home/home";
 import {JobOffersPage} from "../job-offer-page-group/job-offers/job-offers";
 import {LoginPage} from "../login/login";
+import {CoursePage} from "../course-group/course/course";
 
 /**
  * Generated class for the TabsPage page.
@@ -20,6 +21,7 @@ export class TabsPage {
   joboffersPage= JobOffersPage;
   homePage= HomePage;
   loginPage= LoginPage;
+  coursesPage= CoursePage;
 
 
 }

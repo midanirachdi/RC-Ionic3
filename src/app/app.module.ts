@@ -22,6 +22,12 @@ import { RefugeesPage } from '../pages/refugees/refugees';
 import { RefugeesService } from '../services/refugees.service';
 import { ChartModule } from 'angular2-highcharts';
 import * as highcharts from 'Highcharts'
+
+import {CoursePage} from "../pages/course-group/course/course";
+import {CoursesPage} from "../pages/course-group/courses/courses";
+import {AddCoursePage} from "../pages/course-group/add-course/add-course";
+import {CourseService} from "../services/course.service";
+
 @NgModule({
   declarations: [
     MyApp,
@@ -32,7 +38,10 @@ import * as highcharts from 'Highcharts'
     LoginPage,
     JobOfferAddPage,
     RefugeeListJobOffersPage,
-    RefugeesPage
+    RefugeesPage,
+    CoursePage,
+    CoursesPage,
+    AddCoursePage
   ],
   imports: [
     BrowserModule,
@@ -55,7 +64,10 @@ import * as highcharts from 'Highcharts'
     LoginPage,
     JobOfferAddPage,
     RefugeeListJobOffersPage,
-    RefugeesPage
+    RefugeesPage,
+    CoursePage,
+    CoursesPage,
+    AddCoursePage
   ],
   providers: [
     StatusBar,
@@ -63,7 +75,8 @@ import * as highcharts from 'Highcharts'
     NativeGeocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     JobofferService,
-    RefugeesService
+    RefugeesService,
+    CourseService
   ]
 })
 export class AppModule {}
