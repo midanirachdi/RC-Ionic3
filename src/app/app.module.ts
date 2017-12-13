@@ -20,6 +20,10 @@ import {JobOfferAddPage} from "../pages/job-offer-page-group/job-offer-add/job-o
 import {RefugeeListJobOffersPage} from "../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers";
 import { RefugeesPage } from '../pages/refugees/refugees';
 import { RefugeesService } from '../services/refugees.service';
+import {CoursePage} from "../pages/course-group/course/course";
+import {CoursesPage} from "../pages/course-group/courses/courses";
+import {AddCoursePage} from "../pages/course-group/add-course/add-course";
+import {CourseService} from "../services/course.service";
 
 @NgModule({
   declarations: [
@@ -31,7 +35,10 @@ import { RefugeesService } from '../services/refugees.service';
     LoginPage,
     JobOfferAddPage,
     RefugeeListJobOffersPage,
-    RefugeesPage
+    RefugeesPage,
+    CoursePage,
+    CoursesPage,
+    AddCoursePage
   ],
   imports: [
     BrowserModule,
@@ -53,7 +60,10 @@ import { RefugeesService } from '../services/refugees.service';
     LoginPage,
     JobOfferAddPage,
     RefugeeListJobOffersPage,
-    RefugeesPage
+    RefugeesPage,
+    CoursePage,
+    CoursesPage,
+    AddCoursePage
   ],
   providers: [
     StatusBar,
@@ -61,7 +71,8 @@ import { RefugeesService } from '../services/refugees.service';
     NativeGeocoder,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     JobofferService,
-    RefugeesService
+    RefugeesService,
+    CourseService
   ]
 })
 export class AppModule {}

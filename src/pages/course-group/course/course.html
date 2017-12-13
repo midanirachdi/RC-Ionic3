@@ -1,0 +1,53 @@
+<!--
+  Generated template for the CoursePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>course</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+
+
+  <button class="mLeft" (click)="onAddC()" ion-button small outline item-end icon-left>
+    <ion-icon name="add-circle"></ion-icon>
+    Add Course
+  </button>
+
+
+  <ion-card padding *ngFor="let c of courses">
+    <ion-card-header >
+      {{c.name}}
+    </ion-card-header>
+
+    <ion-row>
+      <ion-col text-right>
+
+        <button
+          ion-button
+          color="default"
+          outline
+          round
+          small (click)="onViewC(c)">
+          Details</button>
+
+        <button
+          ion-button
+          outline
+          round
+          small
+          color="danger" (click)="onDeleteC(c)">Delete</button>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+
+</ion-content>
