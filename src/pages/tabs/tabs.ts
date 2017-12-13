@@ -4,6 +4,7 @@ import {HomePage} from "../home/home";
 import {JobOffersPage} from "../job-offer-page-group/job-offers/job-offers";
 import {LoginPage} from "../login/login";
 import {CoursePage} from "../course-group/course/course";
+import {EvenementsPage} from "../evenements/evenements";
 
 /**
  * Generated class for the TabsPage page.
@@ -22,6 +23,6 @@ export class TabsPage {
   homePage= HomePage;
   loginPage= LoginPage;
   coursesPage= CoursePage;
-
+  evenementsPage=EvenementsPage;
 
 }
