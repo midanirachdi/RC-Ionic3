@@ -1,3 +1,5 @@
+import { EvenementService } from './../services/evenement.service';
+import { EvenementsPage } from './../pages/evenements/evenements';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -20,6 +22,9 @@ import {JobOfferAddPage} from "../pages/job-offer-page-group/job-offer-add/job-o
 import {RefugeeListJobOffersPage} from "../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers";
 import { RefugeesPage } from '../pages/refugees/refugees';
 import { RefugeesService } from '../services/refugees.service';
+import { ChartModule } from 'angular2-highcharts';
+import * as highcharts from 'Highcharts'
+
 import {CoursePage} from "../pages/course-group/course/course";
 import {CoursesPage} from "../pages/course-group/courses/courses";
 import {AddCoursePage} from "../pages/course-group/add-course/add-course";
@@ -38,7 +43,8 @@ import {CourseService} from "../services/course.service";
     RefugeesPage,
     CoursePage,
     CoursesPage,
-    AddCoursePage
+    AddCoursePage,
+    EvenementsPage
   ],
   imports: [
     BrowserModule,
@@ -48,7 +54,8 @@ import {CourseService} from "../services/course.service";
       apiKey: 'AIzaSyAHcVsCeJyyQ7gDW8gaFyquAkoxQNN6dZA'
     }),
     AgmSnazzyInfoWindowModule,
-    HttpClientModule
+    HttpClientModule,
+    ChartModule.forRoot(highcharts)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -63,7 +70,8 @@ import {CourseService} from "../services/course.service";
     RefugeesPage,
     CoursePage,
     CoursesPage,
-    AddCoursePage
+    AddCoursePage,
+    EvenementsPage
   ],
   providers: [
     StatusBar,
@@ -72,7 +80,8 @@ import {CourseService} from "../services/course.service";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     JobofferService,
     RefugeesService,
-    CourseService
+    CourseService,
+    EvenementService
   ]
 })
 export class AppModule {}

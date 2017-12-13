@@ -1,0 +1,38 @@
+<!--
+  Generated template for the EvenementsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-row>
+      <ion-title text-center>Events</ion-title>
+      <ion-buttons>
+        <button ion-button menuToggle style="color:white">
+              <ion-icon name="menu"></ion-icon>
+            </button>
+      </ion-buttons>
+    </ion-row>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card padding *ngFor="let e of evenements">
+    <ion-card-header>
+      {{e.name}}
+    </ion-card-header>
+
+    <ion-card-content>
+      <img src="assets/imgs/event/{{e.imagename}}.jpg">
+      <hr>
+      <h5>{{e.dateEvent}}</h5>
+      <hr>
+      <h6>{{e.description }}</h6>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

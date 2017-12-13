@@ -199,7 +199,7 @@ var CoursesPage = (function () {
     };
     CoursesPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-courses',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/course-group/courses/courses.html"*/'<!--\n  Generated template for the CoursesPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>{{name}}</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding text-center>\n\n  <ion-card padding text-left>\n    <ion-card-content>\n\n      <p><b>Description : </b> {{description}}</p>\n      <hr>\n      <p><b>From : </b>{{startdate}} </p>\n      <hr>\n      <p><b>To : </b>{{enddate}}</p>\n\n    </ion-card-content>\n\n  </ion-card>\n\n  <button small ion-button color="danger" (click)="onClose()">Exit</button>\n\n\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/course-group/courses/courses.html"*/,
+            selector: 'page-courses',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/course-group/courses/courses.html"*/'<!--\n  Generated template for the CoursesPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-row>\n\n    <ion-title text-center>{{name}}</ion-title>\n    <ion-buttons>\n      <button ion-button menuToggle style="color:white">\n        <ion-icon name="menu" side="right"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-row>\n\n</ion-header>\n\n\n<ion-content padding text-center>\n\n  <ion-card padding text-left>\n    <ion-card-content>\n\n      <p><b>Description : </b> {{description}}</p>\n      <hr>\n      <p><b>From : </b>{{startdate}} </p>\n      <hr>\n      <p><b>To : </b>{{enddate}}</p>\n\n    </ion-card-content>\n\n  </ion-card>\n\n  <button small ion-button color="danger" (click)="onClose()">Exit</button>\n\n\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/course-group/courses/courses.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
             __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]])
@@ -242,7 +242,7 @@ var HomePage = (function () {
     }
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-buttons>\n      <button ion-button menuToggle style="color:white">\n        <ion-icon name="menu"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title>Home page</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n<p> home page content</p>\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/home/home.html"*/,
+            selector: 'page-home',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/home/home.html"*/'<ion-header>\n  <ion-navbar >\n    <ion-row>\n\n    <ion-title text-center>Refugee Camp</ion-title>\n    <ion-buttons>\n      <button ion-button menuToggle style="color:white">\n        <ion-icon name="menu" side="right"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-row>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n<ion-card style="display:flex;justify-content:center;">\n<chart [options]="chartOptions" type="chart"></chart>\n</ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/home/home.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]])
     ], HomePage);
@@ -516,7 +516,7 @@ var RefugeesPage = (function () {
     };
     RefugeesPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({
-            selector: 'page-refugees',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/refugees/refugees.html"*/'<!--\n  Generated template for the RefugeesPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n      <ion-buttons>\n          <button ion-button menuToggle style="color:white">\n            <ion-icon name="menu"></ion-icon>\n          </button>\n        </ion-buttons>\n    <ion-title>Refugees List</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>\n    <ion-card padding *ngFor="let r of filtredRefugees">\n        <ion-card-header >\n          <h2>{{r.firstname}} {{r.lastName}}</h2>\n        </ion-card-header>\n\n        <ion-card-content>\n          <p>Gender: {{r.sex }} <br>\n              Date of birth: {{r.dateOfBirth}}\n          </p>\n        </ion-card-content>\n    </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/refugees/refugees.html"*/,
+            selector: 'page-refugees',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/refugees/refugees.html"*/'<!--\n  Generated template for the RefugeesPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n    <ion-navbar >\n      <ion-row>\n        <ion-title text-center>Refugees List</ion-title>\n        <ion-buttons>\n          <button ion-button menuToggle style="color:white">\n            <ion-icon name="menu"></ion-icon>\n          </button>\n        </ion-buttons>\n      </ion-row>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n    <ion-searchbar placeholder="Search by firstname" (ionInput)="getItems($event)"></ion-searchbar>\n    <ion-card padding *ngFor="let r of filtredRefugees">\n        <ion-card-header >\n          <h2>{{r.firstname}} {{r.lastName}}</h2>\n        </ion-card-header>\n\n        <ion-card-content>\n          <p>Gender: {{r.sex }} <br>\n              Date of birth: {{r.dateOfBirth}}\n          </p>\n        </ion-card-content>\n    </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/refugees/refugees.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_0__services_refugees_service__["a" /* RefugeesService */]])
     ], RefugeesPage);
@@ -550,47 +550,51 @@ webpackEmptyAsyncContext.id = 188;
 var map = {
 	"../pages/course-group/add-course/add-course.module": [
 		717,
-		11
+		25
 	],
 	"../pages/course-group/course/course.module": [
 		718,
-		10
+		24
 	],
 	"../pages/course-group/courses/courses.module": [
 		719,
-		9
+		23
+	],
+	"../pages/evenements/evenements.module": [
+		729,
+		14
 	],
 	"../pages/home/home.module": [
 		720,
-		8
+		22
 	],
 	"../pages/job-offer-page-group/job-offer-add/job-offer-add.module": [
 		721,
-		7
+		21
 	],
 	"../pages/job-offer-page-group/job-offer/job-offer.module": [
 		722,
-		6
+		20
 	],
 	"../pages/job-offer-page-group/job-offers/job-offers.module": [
 		723,
-		5
+		19
 	],
 	"../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers.module": [
 		724,
-		4
+		18
 	],
 	"../pages/login/login.module": [
 		725,
-		3
+		17
 	],
 	"../pages/refugees/refugees.module": [
 		727,
-		2
+		16
 	],
 	"../pages/tabs/tabs.module": [
 		726,
-		1
+		15
 	]
 };
 function webpackAsyncContext(req) {
@@ -905,7 +909,7 @@ var MyApp = (function () {
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavController */])
     ], MyApp.prototype, "nav", void 0);
     MyApp = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/app/app.html"*/'<ion-menu [content]="nav">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Main menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-content>\n    <ion-list>\n      <button ion-item (click)="onLoad(tabsPage)">\n        <ion-icon name="home" item-left></ion-icon>\n        Home\n      </button>\n      <button ion-item (click)="onLoad(joboffersPage)">\n        <ion-icon name="briefcase" item-left></ion-icon>\n        Job offers\n      </button>\n      <button ion-item (click)="onLoad(refugeesPage)">\n        <ion-icon name="briefcase" item-left></ion-icon>\n        Refugees\n      </button>\n      <button ion-item (click)="onLoad(coursesPage)">\n        <ion-icon name="briefcase" item-left></ion-icon>\n        Courses\n      </button>\n    </ion-list>\n  </ion-content>\n  <ion-footer>\n    <page-tabs></page-tabs>\n  </ion-footer>\n</ion-menu>\n<ion-nav [root]="loginPage" #nav></ion-nav>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/app/app.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/app/app.html"*/'<ion-menu [content]="nav">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Main menu</ion-title>\n    </ion-toolbar>\n  </ion-header>\n  <ion-content>\n    <ion-list>\n      <button ion-item (click)="onLoad(tabsPage)">\n        <ion-icon name="home" item-left></ion-icon>\n        Home\n      </button>\n      <button ion-item (click)="onLoad(joboffersPage)">\n        <ion-icon name="briefcase" item-left></ion-icon>\n        Job offers\n      </button>\n      <button ion-item (click)="onLoad(refugeesPage)">\n        <ion-icon name="people" item-left></ion-icon>\n        Refugees\n      </button>\n      <button ion-item (click)="onLoad(coursesPage)">\n        <ion-icon name="book" item-left></ion-icon>\n        Courses\n      </button>\n      <button ion-item (click)="onLoad(evenementsPage)">\n        <ion-icon name="image" item-left></ion-icon>\n        Events\n      </button>\n    </ion-list>\n  </ion-content>\n  <ion-footer>\n    <page-tabs></page-tabs>\n  </ion-footer>\n</ion-menu>\n<ion-nav [root]="loginPage" #nav></ion-nav>'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/app/app.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* Platform */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__["a" /* SplashScreen */],
             __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* MenuController */]])
@@ -1174,7 +1178,7 @@ var JobOffersPage = (function () {
     };
     JobOffersPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-job-offers',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/job-offer-page-group/job-offers/job-offers.html"*/'<!--\n  Generated template for the JobOffersPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-buttons>\n      <button ion-button menuToggle style="color:white">\n        <ion-icon name="menu"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title text-center>Job Offers</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n\n  <ion-card class="cardRC">\n    <img src="assets/imgs/space-desk-workspace-coworking.jpg"/>\n    <div style="position: absolute" class="card-title">Job Offers</div>\n\n  </ion-card>\n<!--pass JO here-->\n  <button class="mLeft" (click)="onAddJO()" ion-button small outline item-end icon-left>\n    <ion-icon name="add-circle"></ion-icon>\n    Add new job offer\n  </button>\n\n\n  <ion-card padding *ngFor="let j of jobOffers">\n    <ion-card-header >\n      {{j.title}}\n    </ion-card-header>\n\n    <ion-card-content>\n      <p>{{j.description }}</p>\n    </ion-card-content>\n\n\n\n    <ion-row>\n      <ion-col text-right>\n\n        <button\n          ion-button\n          color="default"\n          outline\n          round\n          small (click)="onViewJO(j)">\n          Details</button>\n        <button\n          ion-button\n          color="secondary"\n          outline\n          round\n          small (click)="onBestCandidates(j)">\n          Best candidates</button>\n        <button\n          ion-button\n          outline\n          round\n          small\n          color="danger" (click)="onDeleteJO(j)">Delete</button>\n      </ion-col>\n    </ion-row>\n\n  </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/job-offer-page-group/job-offers/job-offers.html"*/,
+            selector: 'page-job-offers',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/job-offer-page-group/job-offers/job-offers.html"*/'<!--\n  Generated template for the JobOffersPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n    <ion-navbar >\n        <ion-row>\n          <ion-title text-center>Job offers</ion-title>\n          <ion-buttons>\n            <button ion-button menuToggle style="color:white">\n              <ion-icon name="menu"></ion-icon>\n            </button>\n          </ion-buttons>\n        </ion-row>\n    </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n\n\n  <ion-card class="cardRC">\n    <img src="assets/imgs/space-desk-workspace-coworking.jpg"/>\n    <div style="position: absolute" class="card-title">Job Offers</div>\n\n  </ion-card>\n<!--pass JO here-->\n  <button class="mLeft" (click)="onAddJO()" ion-button small outline item-end icon-left>\n    <ion-icon name="add-circle"></ion-icon>\n    Add new job offer\n  </button>\n\n\n  <ion-card padding *ngFor="let j of jobOffers">\n    <ion-card-header >\n      {{j.title}}\n    </ion-card-header>\n\n    <ion-card-content>\n      <p>{{j.description }}</p>\n    </ion-card-content>\n\n\n\n    <ion-row>\n      <ion-col text-right>\n\n        <button\n          ion-button\n          color="default"\n          outline\n          round\n          small (click)="onViewJO(j)">\n          Details</button>\n        <button\n          ion-button\n          color="secondary"\n          outline\n          round\n          small (click)="onBestCandidates(j)">\n          Best candidates</button>\n        <button\n          ion-button\n          outline\n          round\n          small\n          color="danger" (click)="onDeleteJO(j)">Delete</button>\n      </ion-col>\n    </ion-row>\n\n  </ion-card>\n</ion-content>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/job-offer-page-group/job-offers/job-offers.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_2__services_joboffer_service__["a" /* JobofferService */],
@@ -1278,7 +1282,7 @@ var TabsPage = (function () {
     }
     TabsPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-            selector: 'page-tabs',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/tabs/tabs.html"*/'\n<ion-tabs>\n\n  <ion-tab [root]="homePage" tabTitle="Home" tabIcon="book"></ion-tab>\n  <!-- add this here to navigate [root]="joboffersPage"-->\n  <ion-tab  tabTitle="Events" tabIcon="briefcase"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/tabs/tabs.html"*/,
+            selector: 'page-tabs',template:/*ion-inline-start:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/tabs/tabs.html"*/'\n<ion-tabs>\n\n  <ion-tab [root]="homePage" tabTitle="Home" tabIcon="book"></ion-tab>\n  <!-- add this here to navigate [root]="joboffersPage"-->\n  <ion-tab [root]="evenementsPage" tabTitle="Events" tabIcon="image"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"/Users/macboookpro/Refugees-camp-Ionic/src/pages/tabs/tabs.html"*/,
         })
     ], TabsPage);
     return TabsPage;

@@ -6,20 +6,22 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-      <ion-buttons>
+    <ion-navbar >
+      <ion-row>
+        <ion-title text-center>Refugees List</ion-title>
+        <ion-buttons>
           <button ion-button menuToggle style="color:white">
             <ion-icon name="menu"></ion-icon>
           </button>
         </ion-buttons>
-    <ion-title>Refugees List</ion-title>
+      </ion-row>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+    <ion-searchbar placeholder="Search by firstname" (ionInput)="getItems($event)"></ion-searchbar>
     <ion-card padding *ngFor="let r of filtredRefugees">
         <ion-card-header >
           <h2>{{r.firstname}} {{r.lastName}}</h2>
