@@ -1,3 +1,5 @@
+import { EvenementService } from './../services/evenement.service';
+import { EvenementsPage } from './../pages/evenements/evenements';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -41,7 +43,8 @@ import {CourseService} from "../services/course.service";
     RefugeesPage,
     CoursePage,
     CoursesPage,
-    AddCoursePage
+    AddCoursePage,
+    EvenementsPage
   ],
   imports: [
     BrowserModule,
@@ -67,7 +70,8 @@ import {CourseService} from "../services/course.service";
     RefugeesPage,
     CoursePage,
     CoursesPage,
-    AddCoursePage
+    AddCoursePage,
+    EvenementsPage
   ],
   providers: [
     StatusBar,
@@ -76,7 +80,8 @@ import {CourseService} from "../services/course.service";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     JobofferService,
     RefugeesService,
-    CourseService
+    CourseService,
+    EvenementService
   ]
 })
 export class AppModule {}
