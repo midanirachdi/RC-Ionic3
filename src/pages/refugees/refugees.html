@@ -21,7 +21,7 @@
 
 
 <ion-content padding>
-    <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+    <ion-searchbar placeholder="Search by firstname" (ionInput)="getItems($event)"></ion-searchbar>
     <ion-card padding *ngFor="let r of filtredRefugees">
         <ion-card-header >
           <h2>{{r.firstname}} {{r.lastName}}</h2>
