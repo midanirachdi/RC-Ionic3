@@ -16,4 +16,8 @@ export class RefugeesService {
     return this.http.get<Refugee[]>(this.REFUGEES_URL);
   }
 
+  public getRefugeesPerAge() {
+    return this.http.get(this.REFUGEES_URL + '/AgeCategory');
+  }
+
 }

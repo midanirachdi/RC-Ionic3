@@ -1,6 +1,6 @@
 webpackJsonp([5],{
 
-/***/ 715:
+/***/ 727:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22,7 +22,7 @@ var JobOffersPageModule = (function () {
     function JobOffersPageModule() {
     }
     JobOffersPageModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["L" /* NgModule */])({
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
             declarations: [
                 __WEBPACK_IMPORTED_MODULE_2__job_offers__["a" /* JobOffersPage */],
             ],

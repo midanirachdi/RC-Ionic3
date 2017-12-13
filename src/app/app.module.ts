@@ -20,7 +20,8 @@ import {JobOfferAddPage} from "../pages/job-offer-page-group/job-offer-add/job-o
 import {RefugeeListJobOffersPage} from "../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers";
 import { RefugeesPage } from '../pages/refugees/refugees';
 import { RefugeesService } from '../services/refugees.service';
-
+import { ChartModule } from 'angular2-highcharts';
+import * as highcharts from 'Highcharts'
 @NgModule({
   declarations: [
     MyApp,
@@ -41,7 +42,8 @@ import { RefugeesService } from '../services/refugees.service';
       apiKey: 'AIzaSyAHcVsCeJyyQ7gDW8gaFyquAkoxQNN6dZA'
     }),
     AgmSnazzyInfoWindowModule,
-    HttpClientModule
+    HttpClientModule,
+    ChartModule.forRoot(highcharts)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
