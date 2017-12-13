@@ -1,14 +1,14 @@
 webpackJsonp([11],{
 
-/***/ 721:
+/***/ 718:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CoursePageModule", function() { return CoursePageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddCoursePageModule", function() { return AddCoursePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__course__ = __webpack_require__(728);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__add_course__ = __webpack_require__(169);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,26 +18,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var CoursePageModule = (function () {
-    function CoursePageModule() {
+var AddCoursePageModule = (function () {
+    function AddCoursePageModule() {
     }
-    CoursePageModule = __decorate([
+    AddCoursePageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["L" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__course__["a" /* CoursePage */],
+                __WEBPACK_IMPORTED_MODULE_2__add_course__["a" /* AddCoursePage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__course__["a" /* CoursePage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__add_course__["a" /* AddCoursePage */]),
             ],
-            exports: [
-                __WEBPACK_IMPORTED_MODULE_2__course__["a" /* CoursePage */]
-            ]
         })
-    ], CoursePageModule);
-    return CoursePageModule;
+    ], AddCoursePageModule);
+    return AddCoursePageModule;
 }());
 
-//# sourceMappingURL=course.module.js.map
+//# sourceMappingURL=add-course.module.js.map
 
 /***/ })
 
