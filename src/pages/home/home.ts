@@ -1,7 +1,13 @@
+
+import { Subscription } from 'rxjs/Subscription';
+import { AuthService } from './../../services/auth.service';
+
 import { RefugeesService } from './../../services/refugees.service';
+
 import {Component, OnInit} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {TabsPage} from "../tabs/tabs";
+import {User} from "../../entities/User";
 
 
 
@@ -18,9 +24,11 @@ import {TabsPage} from "../tabs/tabs";
 })
 export class HomePage {
 
+  user:User=null;
+
   chartOptions: any;
   Babies:number;Children:number;Teenagers:number;Adults:number;Ageds:number;
-  constructor(public navCtrl: NavController,public  navParams:NavParams, private refugeesService: RefugeesService)
+  constructor(public navCtrl: NavController,public  navParams:NavParams, private refugeesService: RefugeesService,public as:AuthService)
   {
     this.refugeesService.getRefugeesPerAge().subscribe((res) => ( this.Babies = res[0], this.Children = res[1], this.Teenagers = res[2], this.Adults = res[3], this.Ageds = res[4],
 
@@ -76,5 +84,11 @@ export class HomePage {
  }
     }));
   }
+  ionViewDidLoad(){
+    this.as.user.subscribe(e=>{
+      this.user=e;
+      console.log(this.user);
+    })
 
+  }
 }

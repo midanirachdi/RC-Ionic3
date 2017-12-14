@@ -11,9 +11,15 @@
   </ion-row>
   </ion-navbar>
 </ion-header>
-
 <ion-content padding>
+
+  <h1> Welcome </h1>
+  <h3>{{user?.firstName}} {{user?.lastName}}</h3>
+
+
+
 <ion-card style="display:flex;justify-content:center;">
 <chart [options]="chartOptions" type="chart"></chart>
 </ion-card>
+
 </ion-content>
