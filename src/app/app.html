@@ -10,6 +10,10 @@
         <ion-icon name="home" item-left></ion-icon>
         Home
       </button>
+      <button ion-item (click)="onLoad(newsPage)">
+          <ion-icon name="bookmarks" item-left></ion-icon>
+          News
+        </button>
       <button ion-item (click)="onLoad(joboffersPage)">
         <ion-icon name="briefcase" item-left></ion-icon>
         Job offers
@@ -26,6 +30,7 @@
         <ion-icon name="image" item-left></ion-icon>
         Events
       </button>
+      
     </ion-list>
   </ion-content>
   <ion-footer>

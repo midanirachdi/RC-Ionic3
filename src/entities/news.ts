@@ -4,4 +4,5 @@ export class News {
     content: string;
     location: string;
     dateOfCreation: string;
+    title:string;
 }

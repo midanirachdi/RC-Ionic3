@@ -29,6 +29,10 @@ import {CoursePage} from "../pages/course-group/course/course";
 import {CoursesPage} from "../pages/course-group/courses/courses";
 import {AddCoursePage} from "../pages/course-group/add-course/add-course";
 import {CourseService} from "../services/course.service";
+import { NewsPage } from '../pages/news/news';
+import { NewsService } from '../services/news.service';
+import { AddnewsPage } from '../pages/news/addnews/addnews';
+
 
 @NgModule({
   declarations: [
@@ -44,7 +48,9 @@ import {CourseService} from "../services/course.service";
     CoursePage,
     CoursesPage,
     AddCoursePage,
-    EvenementsPage
+    EvenementsPage,
+    NewsPage,
+    AddnewsPage
   ],
   imports: [
     BrowserModule,
@@ -71,7 +77,9 @@ import {CourseService} from "../services/course.service";
     CoursePage,
     CoursesPage,
     AddCoursePage,
-    EvenementsPage
+    EvenementsPage,
+    NewsPage,
+    AddnewsPage
   ],
   providers: [
     StatusBar,
@@ -81,7 +89,8 @@ import {CourseService} from "../services/course.service";
     JobofferService,
     RefugeesService,
     CourseService,
-    EvenementService
+    EvenementService,
+    NewsService
   ]
 })
 export class AppModule {}

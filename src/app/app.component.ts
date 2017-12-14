@@ -8,6 +8,7 @@ import {TabsPage} from "../pages/tabs/tabs";
 import {LoginPage} from "../pages/login/login";
 import {JobOffersPage} from "../pages/job-offer-page-group/job-offers/job-offers";
 import {CoursePage} from "../pages/course-group/course/course";
+import { NewsPage } from '../pages/news/news';
 
 
 @Component({
@@ -21,6 +22,7 @@ loginPage=LoginPage;
   refugeesPage=RefugeesPage;
   coursesPage= CoursePage;
   evenementsPage=EvenementsPage;
+  newsPage=NewsPage
 
 
   @ViewChild('nav') nav:NavController;
