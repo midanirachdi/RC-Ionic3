@@ -92,4 +92,5 @@
         <variable name="APP_ID" value="170197633567661" />
         <variable name="APP_NAME" value="refugees-camp - Test1" />
     </plugin>
+    <allow-navigation href="http://172.16.56.8:8100" />
 </widget>

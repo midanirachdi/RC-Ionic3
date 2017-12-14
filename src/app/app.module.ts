@@ -1,4 +1,7 @@
 
+import { EvenementService } from './../services/evenement.service';
+import { EvenementsPage } from './../pages/evenements/evenements';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -22,6 +25,9 @@ import {JobOfferAddPage} from "../pages/job-offer-page-group/job-offer-add/job-o
 import {RefugeeListJobOffersPage} from "../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers";
 import { RefugeesPage } from '../pages/refugees/refugees';
 import { RefugeesService } from '../services/refugees.service';
+import { ChartModule } from 'angular2-highcharts';
+import * as highcharts from 'Highcharts'
+
 import {CoursePage} from "../pages/course-group/course/course";
 import {CoursesPage} from "../pages/course-group/courses/courses";
 import {AddCoursePage} from "../pages/course-group/add-course/add-course";
@@ -30,6 +36,7 @@ import {UserService} from '../services/user.service';
 import {AuthService} from '../services/auth.service';
 import { jwtInterceptor } from '../security/jwt.interceptor';
 import { RegisterPage } from '../pages/register/register';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   declarations: [
@@ -46,16 +53,19 @@ import { RegisterPage } from '../pages/register/register';
     CoursesPage,
     AddCoursePage,
     RegisterPage
+  //  EvenementsPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAHcVsCeJyyQ7gDW8gaFyquAkoxQNN6dZA'
     }),
     AgmSnazzyInfoWindowModule,
-    HttpClientModule
+    HttpClientModule,
+    ChartModule.forRoot(highcharts)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -71,7 +81,10 @@ import { RegisterPage } from '../pages/register/register';
     CoursePage,
     CoursesPage,
     AddCoursePage,
+
     RegisterPage
+
+ //   EvenementsPage
   ],
   providers: [
     {
@@ -89,8 +102,7 @@ import { RegisterPage } from '../pages/register/register';
     AuthService,
     UserService,
     Facebook,
-    
-  
+    EvenementService
   ]
 })
 export class AppModule {}

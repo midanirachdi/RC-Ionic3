@@ -1,3 +1,4 @@
+import { EvenementsPage } from './../pages/evenements/evenements';
 import { RefugeesPage } from './../pages/refugees/refugees';
 import {Component, ViewChild} from '@angular/core';
 import {MenuController, NavController, Platform} from 'ionic-angular';
@@ -19,6 +20,7 @@ loginPage=LoginPage;
   joboffersPage=JobOffersPage;
   refugeesPage=RefugeesPage;
   coursesPage= CoursePage;
+  evenementsPage=EvenementsPage;
 
 
   @ViewChild('nav') nav:NavController;

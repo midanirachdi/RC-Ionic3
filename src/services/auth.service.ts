@@ -4,12 +4,13 @@ import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
 import {BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Facebook } from '@ionic-native/facebook';
-import { Storage } from '@ionic/storage'
+import { Storage } from '@ionic/storage';
 import { JwtHelper } from 'angular2-jwt';
 import {LOGIN_URL} from './java.urls';
 import{UserService } from './user.service';
 import {User,Admin,CampChef,DistrictChef,Volunteer} from '../entities/User'
 import {UserMapper} from '../Utils/UserMapper';
+
 //import { Object } from 'core-js/library/web/timers';
 
 
@@ -27,13 +28,15 @@ export class AuthService implements OnDestroy {
   subscr:Subscription;
   lg:boolean=false;
   token:string="";
-  constructor(public http: HttpClient,private userService:UserService,private fb: Facebook) {
+  constructor(public http: HttpClient,private userService:UserService,private fb: Facebook,public storage:Storage) {
   
 
   }
 
   public getToken(): string {
-    return localStorage.getItem('token');
+    let tkn:string="";
+    this.storage.get('token').then(e=>tkn=e);
+    return tkn;
   }
 
 
@@ -50,12 +53,12 @@ export class AuthService implements OnDestroy {
       (data) => {
         console.log(data)
         let barear=data.headers.get('Authorization');
-        localStorage.setItem('token',barear);
-        localStorage.setItem('cmode','Basic')
+        this.storage.set('token',barear);
+        this.storage.set('cmode','Basic')
         let paylod:{
             id:number;
             role:string;}=JwtHelper.prototype.decodeToken(barear);
-            localStorage.setItem('role',paylod.role)
+            this.storage.set('role',paylod.role)
             this.userLogged.next(true);
 
             this.userService.getMe().subscribe((u:User)=>{
@@ -105,7 +108,7 @@ export class AuthService implements OnDestroy {
   public LogOut():void{
     this.user.next(null);
     this.userLogged.next(false);
-    localStorage.clear();
+    this.storage.clear().then();
     this.lg=false;
   }
 

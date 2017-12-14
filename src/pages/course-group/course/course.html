@@ -23,13 +23,17 @@
 
 
 
+
   <button class="mLeft" (click)="onAddC()" ion-button small outline item-end icon-left>
     <ion-icon name="add-circle"></ion-icon>
     Add Course
   </button>
+  <!--//////-->
+  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
 
+  <!--/////-->
 
-  <ion-card padding *ngFor="let c of courses">
+  <ion-card padding *ngFor="let c of filtreCourses">
     <ion-card-header >
       {{c.name}}
     </ion-card-header>
@@ -47,10 +51,11 @@
 
         <button
           ion-button
-          outline
+
           round
           small
-          color="danger" (click)="onDeleteC(c)">Delete</button>
+          color="danger" (click)="onDeleteC(c)">  <ion-icon name="trash"></ion-icon>
+          Delete</button>
       </ion-col>
     </ion-row>
 

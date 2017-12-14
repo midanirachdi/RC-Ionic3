@@ -70,7 +70,7 @@ export class JobOffersPage implements OnInit {
 
     setTimeout(() => {
       loading.dismiss();
-    }, 5000);
+    }, 10000);
 
     this.jobOfferService.getBestCandidatesAndEmailThem(j.id).subscribe(
       (refugees: Refugee[]) => {

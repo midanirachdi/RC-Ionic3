@@ -53,4 +53,7 @@ export class RegisterPage {
       this.us.postUser(userWrapper("Volunteer",this.user)).subscribe(e=>{});
       this.navCtrl.setRoot(LoginPage);
    }
+   onClose(){
+    this.navCtrl.setRoot(LoginPage);
+   }
 }

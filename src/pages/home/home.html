@@ -1,16 +1,25 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar >
+    <ion-row>
+
+    <ion-title text-center>Refugee Camp</ion-title>
     <ion-buttons>
       <button ion-button menuToggle style="color:white">
-        <ion-icon name="menu"></ion-icon>
+        <ion-icon name="menu" side="right"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Home page</ion-title>
+  </ion-row>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
+
   <h1> Welcome </h1>
   <h3>{{user?.firstName}} {{user?.lastName}}</h3>
 
+
+
+<ion-card style="display:flex;justify-content:center;">
+<chart [options]="chartOptions" type="chart"></chart>
+</ion-card>
 
 </ion-content>
