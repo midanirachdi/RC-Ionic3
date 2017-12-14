@@ -1,3 +1,4 @@
+
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -5,7 +6,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { Facebook } from '@ionic-native/facebook';
-
 import { MyApp } from './app.component';
 import {HttpModule} from "@angular/http";
 import {NativeGeocoder} from "@ionic-native/native-geocoder";
@@ -29,6 +29,7 @@ import {CourseService} from "../services/course.service";
 import {UserService} from '../services/user.service';
 import {AuthService} from '../services/auth.service';
 import { jwtInterceptor } from '../security/jwt.interceptor';
+import { RegisterPage } from '../pages/register/register';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { jwtInterceptor } from '../security/jwt.interceptor';
     RefugeesPage,
     CoursePage,
     CoursesPage,
-    AddCoursePage
+    AddCoursePage,
+    RegisterPage
   ],
   imports: [
     BrowserModule,
@@ -68,7 +70,8 @@ import { jwtInterceptor } from '../security/jwt.interceptor';
     RefugeesPage,
     CoursePage,
     CoursesPage,
-    AddCoursePage
+    AddCoursePage,
+    RegisterPage
   ],
   providers: [
     {
@@ -85,7 +88,9 @@ import { jwtInterceptor } from '../security/jwt.interceptor';
     CourseService,
     AuthService,
     UserService,
-    Facebook
+    Facebook,
+    
+  
   ]
 })
 export class AppModule {}

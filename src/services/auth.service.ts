@@ -4,7 +4,7 @@ import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
 import {BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Facebook } from '@ionic-native/facebook';
-
+import { Storage } from '@ionic/storage'
 import { JwtHelper } from 'angular2-jwt';
 import {LOGIN_URL} from './java.urls';
 import{UserService } from './user.service';
@@ -77,7 +77,13 @@ export class AuthService implements OnDestroy {
     .then(res => {
       if(res.status === "connected") {
         this.lg = true;
-        this.token=res.authResponse.accessToken;
+        this.token=res.authResponse.userID;
+        console.log(this.token);
+       /* this.http.get(LOGIN_URL,{
+          headers: new HttpHeaders().set('Authorization',"ftoken "+this.token),
+          observe: 'response',
+          responseType:'text'
+        }).subscribe();*/
       } else {
         this.lg = false;
       }

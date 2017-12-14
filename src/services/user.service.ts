@@ -30,11 +30,9 @@ export class UserService {
 
 
   postUser(str:string){
-    console.log("start user post")
-    let tmp={"Volunteer":{"disable":false,"email":"mohamad.khreibi@esprit.tn","firstName":"test","lastName":"test","password":"123456"}};
-    console.log(JSON.parse(str))
-    this.http.post(USERS_URL,JSON.parse(str)).subscribe(e=>console.log("++++"),err=>console.log(err));
-    console.log("user post end")
+
+   return this.http.post(USERS_URL,JSON.parse(str),{responseType:'text'});
+
   }
 
   putUser(user:string){

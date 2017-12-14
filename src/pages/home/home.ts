@@ -1,6 +1,9 @@
+import { Subscription } from 'rxjs/Subscription';
+import { AuthService } from './../../services/auth.service';
 import {Component, OnInit} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {TabsPage} from "../tabs/tabs";
+import {User} from "../../entities/User";
 
 
 
@@ -16,10 +19,16 @@ import {TabsPage} from "../tabs/tabs";
   templateUrl: 'home.html',
 })
 export class HomePage {
-
-  constructor(public navCtrl: NavController,public  navParams:NavParams)
+  user:User=null;
+  constructor(public navCtrl: NavController,public  navParams:NavParams,public as:AuthService)
   {
 
   }
+  ionViewDidLoad(){
+    this.as.user.subscribe(e=>{
+      this.user=e;
+      console.log(this.user);
+    })
 
+  }
 }

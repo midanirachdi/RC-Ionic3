@@ -1,0 +1,44 @@
+<!--
+  Generated template for the JobOfferAddPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  
+    <ion-navbar>
+      <ion-title>jobOfferAdd</ion-title>
+    </ion-navbar>
+  
+  </ion-header>
+  
+  
+  <ion-content padding>
+    <form [formGroup]="registerForm" (ngSubmit)="submitForm()">
+      <ion-item>
+        <ion-label floating>First Name</ion-label >
+        <ion-input required type="text" formControlName="firstName"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Last Name</ion-label >
+          <ion-input required type="text" formControlName="lastName"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Email</ion-label >
+        <ion-input required type="text" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>password</ion-label >
+        <ion-input required type="text" formControlName="psd"></ion-input>
+      </ion-item>
+
+
+  
+      <div text-center class="mTop">
+      <button ion-button  type="submit" [disabled]="!registerForm.valid">Submit</button>
+        <button ion-button color="danger" (click)="onClose()">Close</button>
+      </div>
+    </form>
+  
+  </ion-content>
+  

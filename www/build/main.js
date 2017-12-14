@@ -1,4 +1,4 @@
-webpackJsonp([12],{
+webpackJsonp([13],{
 
 /***/ 122:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -6,7 +6,7 @@ webpackJsonp([12],{
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CourseService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_map__ = __webpack_require__(236);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_map__ = __webpack_require__(240);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__(0);
@@ -73,23 +73,196 @@ var CourseService = (function () {
 
 /***/ }),
 
-/***/ 141:
+/***/ 126:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LOGIN_URL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__ = __webpack_require__(426);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_jwt__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__java_urls__ = __webpack_require__(131);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__user_service__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Utils_UserMapper__ = __webpack_require__(249);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+//import { Object } from 'core-js/library/web/timers';
+var AuthService = (function () {
+    function AuthService(http, userService, fb) {
+        this.http = http;
+        this.userService = userService;
+        this.fb = fb;
+        this.userLogged = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](false);
+        this.user = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](null);
+        this.lg = false;
+        this.token = "";
+    }
+    AuthService.prototype.ngOnDestroy = function () {
+        this.subscr.unsubscribe();
+    };
+    AuthService.prototype.getToken = function () {
+        return localStorage.getItem('token');
+    };
+    AuthService.prototype.BasicAuth = function (login, psd) {
+        var _this = this;
+        this.http.get(__WEBPACK_IMPORTED_MODULE_5__java_urls__["a" /* LOGIN_URL */], {
+            headers: new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpHeaders */]().set('Authorization', "Basic " + btoa(login + ':' + psd)),
+            observe: 'response',
+            responseType: 'text'
+        })
+            .subscribe(function (data) {
+            console.log(data);
+            var barear = data.headers.get('Authorization');
+            localStorage.setItem('token', barear);
+            localStorage.setItem('cmode', 'Basic');
+            var paylod = __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__["JwtHelper"].prototype.decodeToken(barear);
+            localStorage.setItem('role', paylod.role);
+            _this.userLogged.next(true);
+            _this.userService.getMe().subscribe(function (u) {
+                var temp = JSON.stringify(u);
+                var myuser = Object(__WEBPACK_IMPORTED_MODULE_7__Utils_UserMapper__["a" /* UserMapper */])(temp);
+                _this.user.next(myuser);
+                _this.lg = true;
+            });
+        });
+    };
+    AuthService.prototype.FaceBookAuth = function () {
+        var _this = this;
+        this.fb.login(['email,public_profile,user_photos,user_birthday'])
+            .then(function (res) {
+            if (res.status === "connected") {
+                _this.lg = true;
+                _this.token = res.authResponse.userID;
+                console.log(_this.token);
+                /* this.http.get(LOGIN_URL,{
+                   headers: new HttpHeaders().set('Authorization',"ftoken "+this.token),
+                   observe: 'response',
+                   responseType:'text'
+                 }).subscribe();*/
+            }
+            else {
+                _this.lg = false;
+            }
+        })
+            .catch(function (e) { return console.log('Error logging into Facebook', e); });
+    };
+    AuthService.prototype.GoogleAuth = function () {
+    };
+    AuthService.prototype.isAuthenticated = function () {
+        return this.lg;
+    };
+    AuthService.prototype.LogOut = function () {
+        this.user.next(null);
+        this.userLogged.next(false);
+        localStorage.clear();
+        this.lg = false;
+    };
+    AuthService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_6__user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__user_service__["a" /* UserService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */]) === "function" && _c || Object])
+    ], AuthService);
+    return AuthService;
+    var _a, _b, _c;
+}());
+
+//# sourceMappingURL=auth.service.js.map
+
+/***/ }),
+
+/***/ 131:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* unused harmony export REGISTER_URL */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LOGIN_URL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return USERS_URL; });
 /* unused harmony export REFUGEES_URL */
-var LOGIN_URL = 'http://localhost:18080/refugeesCamp-web/api/home/login';
+/*export const LOGIN_URL='http://10.0.2.2:18080/refugeesCamp-web/api/home/login';
+export const REGISTER_URL='http://10.0.2.2:18080/refugeesCamp-web/api/';
+export const USERS_URL='http://10.0.2.2:18080/refugeesCamp-web/api/users';*/
 var REGISTER_URL = 'http://localhost:18080/refugeesCamp-web/api/';
+var LOGIN_URL = 'http://localhost:18080/refugeesCamp-web/api/home/login';
 var USERS_URL = 'http://localhost:18080/refugeesCamp-web/api/users';
 var REFUGEES_URL = 'http://localhost:18080/refugeesCamp-web/api/Refugees';
 //# sourceMappingURL=java.urls.js.map
 
 /***/ }),
 
-/***/ 172:
+/***/ 132:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__java_urls__ = __webpack_require__(131);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__(46);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var UserService = (function () {
+    function UserService(http) {
+        this.http = http;
+    }
+    UserService.prototype.getMe = function () {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */] + '/me');
+    };
+    UserService.prototype.getUsers = function () {
+        this.http.get(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */], { responseType: 'text' }).subscribe(function (data) {
+            console.log(JSON.parse(data));
+        });
+    };
+    UserService.prototype.getUser = function (id) {
+        this.http.get(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */] + '/' + id, { responseType: 'text' }).subscribe(function (data) {
+            console.log(JSON.parse(data));
+        });
+    };
+    UserService.prototype.postUser = function (str) {
+        return this.http.post(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */], JSON.parse(str), { responseType: 'text' });
+    };
+    UserService.prototype.putUser = function (user) {
+        console.log(JSON.parse(user));
+        this.http.put(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */], JSON.parse(user), { responseType: 'text' }).subscribe(function (data) { return console.log(data); });
+    };
+    UserService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_common_http__["b" /* HttpClient */]])
+    ], UserService);
+    return UserService;
+}());
+
+//# sourceMappingURL=user.service.js.map
+
+/***/ }),
+
+/***/ 175:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -99,7 +272,7 @@ var REFUGEES_URL = 'http://localhost:18080/refugeesCamp-web/api/Refugees';
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_course_service__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__entities_course__ = __webpack_require__(413);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__entities_course__ = __webpack_require__(415);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -169,49 +342,7 @@ var AddCoursePage = (function () {
 
 /***/ }),
 
-/***/ 173:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-/**
- * Generated class for the HomePage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-var HomePage = (function () {
-    function HomePage(navCtrl, navParams) {
-        this.navCtrl = navCtrl;
-        this.navParams = navParams;
-    }
-    HomePage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-home',template:/*ion-inline-start:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\home\home.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <ion-buttons>\n\n      <button ion-button menuToggle style="color:white">\n\n        <ion-icon name="menu"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n    <ion-title>Home page</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n<p> home page content</p>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\home\home.html"*/,
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]])
-    ], HomePage);
-    return HomePage;
-}());
-
-//# sourceMappingURL=home.js.map
-
-/***/ }),
-
-/***/ 174:
+/***/ 176:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -269,14 +400,14 @@ var CoursesPage = (function () {
 
 /***/ }),
 
-/***/ 175:
+/***/ 177:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobOfferPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_joboffer_service__ = __webpack_require__(72);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_auth_service__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -290,65 +421,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 /**
- * Generated class for the JobOfferPage page.
+ * Generated class for the HomePage page.
  *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
+ * See http://ionicframework.com/docs/components/#navigation for more info
+ * on Ionic pages and navigation.
  */
-var JobOfferPage = (function () {
-    function JobOfferPage(jobOfferService, viewCtrl, navParams) {
-        this.jobOfferService = jobOfferService;
-        this.viewCtrl = viewCtrl;
+var HomePage = (function () {
+    function HomePage(navCtrl, navParams, as) {
+        this.navCtrl = navCtrl;
         this.navParams = navParams;
-        //joboffer:Joboffer=null;
-        this.etat = false;
-        this.lat = 34.431140;
-        this.lng = 8.775656;
-        this.MapTypeRc = 'satellite';
+        this.as = as;
+        this.user = null;
     }
-    JobOfferPage.prototype.ngOnInit = function () {
-    };
-    JobOfferPage.prototype.performForwardGeocoding = function (val) {
+    HomePage.prototype.ionViewDidLoad = function () {
         var _this = this;
-        this.jobOfferService.getGEO(val).subscribe(function (resp) {
-            _this.lat = resp.results[0].geometry.location.lat;
-            _this.lng = resp.results[0].geometry.location.lng;
+        this.as.user.subscribe(function (e) {
+            _this.user = e;
+            console.log(_this.user);
         });
-        this.etat = !this.etat;
     };
-    JobOfferPage.prototype.ionViewDidLoad = function () {
-        this.title = this.navParams.get('title');
-        this.description = this.navParams.get('description');
-        this.begindate = this.navParams.get('begindate');
-        this.enddate = this.navParams.get('enddate');
-        this.contactnumber = this.navParams.get('contactnumber');
-        this.fieldOfWork = this.navParams.get('fieldOfWork');
-        this.salaryEstimate = this.navParams.get('salaryEstimate');
-        this.companyName = this.navParams.get('companyName');
-        this.companyAdress = this.navParams.get('companyAdress');
-        this.contactEmail = this.navParams.get('contactEmail');
-        this.contactName = this.navParams.get('contactName');
-    };
-    JobOfferPage.prototype.onClose = function (remove) {
-        if (remove === void 0) { remove = false; }
-        this.viewCtrl.dismiss(remove);
-    };
-    JobOfferPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-job-offer',template:/*ion-inline-start:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\job-offer-page-group\job-offer\job-offer.html"*/'<!--\n\n  Generated template for the QuotePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n\n\n    <ion-title>{{title}}</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content padding text-center>\n\n  <ion-card padding text-left>\n\n    <ion-card-content>\n\n\n\n      <p><b>Description : </b> {{description}}</p>\n\n      <hr>\n\n      <p><b>From : </b>{{begindate}} </p>\n\n      <hr>\n\n      <p><b>To : </b>{{enddate}}</p>\n\n      <hr>\n\n      <p><b>Contact name : </b>{{contactName}}</p>\n\n      <p><b>Contact number : </b>{{contactnumber}}</p>\n\n      <p><b>Contact email : </b>{{contactEmail}}</p>\n\n      <hr> <hr>\n\n      <p><b>Company name : </b>{{companyName}}</p>\n\n      <p><b>Company address : </b>{{companyAdress}}</p>\n\n\n\n\n\n      <ion-grid class="button-group">\n\n        <ion-row>\n\n\n\n            <button\n\n              ion-button\n\n              small\n\n              outline\n\n              color="danger"\n\n              (click)="this.MapTypeRc=\'roadmap\'">Map</button>\n\n            <button\n\n              ion-button\n\n              small\n\n              outline\n\n              color="danger"\n\n              (click)="this.MapTypeRc=\'satellite\'">Satellite</button>\n\n            <button\n\n              ion-button\n\n              small\n\n              outline\n\n              color="danger"\n\n              (click)="performForwardGeocoding(companyAdress)">Show on map</button>\n\n\n\n\n\n        </ion-row>\n\n      </ion-grid>\n\n\n\n\n\n      <agm-map *ngIf="etat" [latitude]="lat"  [longitude]="lng" [zoom]="16"  [mapTypeId]="MapTypeRc" >\n\n        <agm-marker [latitude]="lat" [longitude]="lng">\n\n          <agm-snazzy-info-window  [maxWidth]="200" [closeWhenOthersOpen]="true">\n\n            <ng-template>\n\n              <p>{{lat}}</p>\n\n            </ng-template>\n\n          </agm-snazzy-info-window>\n\n        </agm-marker>\n\n      </agm-map>\n\n\n\n      <hr> <hr>\n\n      <p><b>Salary estimate : </b>{{salaryEstimate}}</p>\n\n      <p><b>Field of work : </b>{{fieldOfWork}}</p>\n\n    </ion-card-content>\n\n\n\n  </ion-card>\n\n\n\n  <button small ion-button color="danger" (click)="onClose()">Close</button>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\job-offer-page-group\job-offer\job-offer.html"*/,
+    HomePage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["Component"])({
+            selector: 'page-home',template:/*ion-inline-start:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\home\home.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <ion-buttons>\n\n      <button ion-button menuToggle style="color:white">\n\n        <ion-icon name="menu"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n    <ion-title>Home page</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n\n  <h1> Welcome </h1>\n\n  <h3>{{user?.firstName}} {{user?.lastName}}</h3>\n\n\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\home\home.html"*/,
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_joboffer_service__["a" /* JobofferService */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
-            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]])
-    ], JobOfferPage);
-    return JobOfferPage;
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["h" /* NavController */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["i" /* NavParams */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["i" /* NavParams */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__services_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__services_auth_service__["a" /* AuthService */]) === "function" && _c || Object])
+    ], HomePage);
+    return HomePage;
+    var _a, _b, _c;
 }());
 
-//# sourceMappingURL=job-offer.js.map
+//# sourceMappingURL=home.js.map
 
 /***/ }),
 
-/***/ 176:
+/***/ 178:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -356,9 +462,9 @@ var JobOfferPage = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__entities_joboffer__ = __webpack_require__(692);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__entities_joboffer__ = __webpack_require__(431);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_common__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_joboffer_service__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_joboffer_service__ = __webpack_require__(75);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -436,7 +542,86 @@ var JobOfferAddPage = (function () {
 
 /***/ }),
 
-/***/ 177:
+/***/ 179:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobOfferPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_joboffer_service__ = __webpack_require__(75);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+/**
+ * Generated class for the JobOfferPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var JobOfferPage = (function () {
+    function JobOfferPage(jobOfferService, viewCtrl, navParams) {
+        this.jobOfferService = jobOfferService;
+        this.viewCtrl = viewCtrl;
+        this.navParams = navParams;
+        //joboffer:Joboffer=null;
+        this.etat = false;
+        this.lat = 34.431140;
+        this.lng = 8.775656;
+        this.MapTypeRc = 'satellite';
+    }
+    JobOfferPage.prototype.ngOnInit = function () {
+    };
+    JobOfferPage.prototype.performForwardGeocoding = function (val) {
+        var _this = this;
+        this.jobOfferService.getGEO(val).subscribe(function (resp) {
+            _this.lat = resp.results[0].geometry.location.lat;
+            _this.lng = resp.results[0].geometry.location.lng;
+        });
+        this.etat = !this.etat;
+    };
+    JobOfferPage.prototype.ionViewDidLoad = function () {
+        this.title = this.navParams.get('title');
+        this.description = this.navParams.get('description');
+        this.begindate = this.navParams.get('begindate');
+        this.enddate = this.navParams.get('enddate');
+        this.contactnumber = this.navParams.get('contactnumber');
+        this.fieldOfWork = this.navParams.get('fieldOfWork');
+        this.salaryEstimate = this.navParams.get('salaryEstimate');
+        this.companyName = this.navParams.get('companyName');
+        this.companyAdress = this.navParams.get('companyAdress');
+        this.contactEmail = this.navParams.get('contactEmail');
+        this.contactName = this.navParams.get('contactName');
+    };
+    JobOfferPage.prototype.onClose = function (remove) {
+        if (remove === void 0) { remove = false; }
+        this.viewCtrl.dismiss(remove);
+    };
+    JobOfferPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-job-offer',template:/*ion-inline-start:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\job-offer-page-group\job-offer\job-offer.html"*/'<!--\n\n  Generated template for the QuotePage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n\n\n    <ion-title>{{title}}</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content padding text-center>\n\n  <ion-card padding text-left>\n\n    <ion-card-content>\n\n\n\n      <p><b>Description : </b> {{description}}</p>\n\n      <hr>\n\n      <p><b>From : </b>{{begindate}} </p>\n\n      <hr>\n\n      <p><b>To : </b>{{enddate}}</p>\n\n      <hr>\n\n      <p><b>Contact name : </b>{{contactName}}</p>\n\n      <p><b>Contact number : </b>{{contactnumber}}</p>\n\n      <p><b>Contact email : </b>{{contactEmail}}</p>\n\n      <hr> <hr>\n\n      <p><b>Company name : </b>{{companyName}}</p>\n\n      <p><b>Company address : </b>{{companyAdress}}</p>\n\n\n\n\n\n      <ion-grid class="button-group">\n\n        <ion-row>\n\n\n\n            <button\n\n              ion-button\n\n              small\n\n              outline\n\n              color="danger"\n\n              (click)="this.MapTypeRc=\'roadmap\'">Map</button>\n\n            <button\n\n              ion-button\n\n              small\n\n              outline\n\n              color="danger"\n\n              (click)="this.MapTypeRc=\'satellite\'">Satellite</button>\n\n            <button\n\n              ion-button\n\n              small\n\n              outline\n\n              color="danger"\n\n              (click)="performForwardGeocoding(companyAdress)">Show on map</button>\n\n\n\n\n\n        </ion-row>\n\n      </ion-grid>\n\n\n\n\n\n      <agm-map *ngIf="etat" [latitude]="lat"  [longitude]="lng" [zoom]="16"  [mapTypeId]="MapTypeRc" >\n\n        <agm-marker [latitude]="lat" [longitude]="lng">\n\n          <agm-snazzy-info-window  [maxWidth]="200" [closeWhenOthersOpen]="true">\n\n            <ng-template>\n\n              <p>{{lat}}</p>\n\n            </ng-template>\n\n          </agm-snazzy-info-window>\n\n        </agm-marker>\n\n      </agm-map>\n\n\n\n      <hr> <hr>\n\n      <p><b>Salary estimate : </b>{{salaryEstimate}}</p>\n\n      <p><b>Field of work : </b>{{fieldOfWork}}</p>\n\n    </ion-card-content>\n\n\n\n  </ion-card>\n\n\n\n  <button small ion-button color="danger" (click)="onClose()">Close</button>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\job-offer-page-group\job-offer\job-offer.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_joboffer_service__["a" /* JobofferService */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */]])
+    ], JobOfferPage);
+    return JobOfferPage;
+}());
+
+//# sourceMappingURL=job-offer.js.map
+
+/***/ }),
+
+/***/ 180:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -488,12 +673,87 @@ var RefugeeListJobOffersPage = (function () {
 
 /***/ }),
 
-/***/ 178:
+/***/ 181:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RegisterPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_user_service__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Utils_UserMapper__ = __webpack_require__(249);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_login__ = __webpack_require__(62);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+/**
+ * Generated class for the RegisterPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var RegisterPage = (function () {
+    function RegisterPage(navCtrl, navParams, formBuilder, us) {
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.formBuilder = formBuilder;
+        this.us = us;
+        this.user = {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+        };
+        this.registerForm = this.formBuilder.group({
+            firstName: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* Validators */].required],
+            lastName: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* Validators */].required],
+            email: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* Validators */].required],
+            psd: ['', __WEBPACK_IMPORTED_MODULE_2__angular_forms__["f" /* Validators */].required],
+        });
+    }
+    RegisterPage.prototype.ionViewDidLoad = function () {
+    };
+    RegisterPage.prototype.submitForm = function () {
+        this.user.firstName = this.registerForm.value.firstName;
+        this.user.lastName = this.registerForm.value.lastName;
+        this.user.email = this.registerForm.value.email;
+        this.user.password = this.registerForm.value.psd;
+        console.log(Object(__WEBPACK_IMPORTED_MODULE_4__Utils_UserMapper__["b" /* userWrapper */])("Volunteer", this.user));
+        this.us.postUser(Object(__WEBPACK_IMPORTED_MODULE_4__Utils_UserMapper__["b" /* userWrapper */])("Volunteer", this.user)).subscribe(function (e) { });
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__login_login__["a" /* LoginPage */]);
+    };
+    RegisterPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-register',template:/*ion-inline-start:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\register\register.html"*/'<!--\n  Generated template for the JobOfferAddPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  \n    <ion-navbar>\n      <ion-title>jobOfferAdd</ion-title>\n    </ion-navbar>\n  \n  </ion-header>\n  \n  \n  <ion-content padding>\n    <form [formGroup]="registerForm" (ngSubmit)="submitForm()">\n      <ion-item>\n        <ion-label floating>First Name</ion-label >\n        <ion-input required type="text" formControlName="firstName"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Last Name</ion-label >\n          <ion-input required type="text" formControlName="lastName"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>Email</ion-label >\n        <ion-input required type="text" formControlName="email"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label floating>password</ion-label >\n        <ion-input required type="text" formControlName="psd"></ion-input>\n      </ion-item>\n\n\n  \n      <div text-center class="mTop">\n      <button ion-button  type="submit" [disabled]="!registerForm.valid">Submit</button>\n        <button ion-button color="danger" (click)="onClose()">Close</button>\n      </div>\n    </form>\n  \n  </ion-content>\n  '/*ion-inline-end:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\register\register.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */], __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */]])
+    ], RegisterPage);
+    return RegisterPage;
+}());
+
+//# sourceMappingURL=register.js.map
+
+/***/ }),
+
+/***/ 182:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RefugeesPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_refugees_service__ = __webpack_require__(336);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_refugees_service__ = __webpack_require__(338);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -543,7 +803,7 @@ var RefugeesPage = (function () {
 
 /***/ }),
 
-/***/ 191:
+/***/ 195:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -556,56 +816,60 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 191;
+webpackEmptyAsyncContext.id = 195;
 
 /***/ }),
 
-/***/ 235:
+/***/ 239:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
 	"../pages/course-group/add-course/add-course.module": [
-		725,
-		11
+		730,
+		12
 	],
 	"../pages/course-group/course/course.module": [
-		727,
-		10
+		731,
+		11
 	],
 	"../pages/course-group/courses/courses.module": [
-		728,
-		9
+		732,
+		10
 	],
 	"../pages/home/home.module": [
-		726,
-		8
+		733,
+		9
 	],
 	"../pages/job-offer-page-group/job-offer-add/job-offer-add.module": [
-		730,
-		7
+		734,
+		8
 	],
 	"../pages/job-offer-page-group/job-offer/job-offer.module": [
-		732,
-		6
+		735,
+		7
 	],
 	"../pages/job-offer-page-group/job-offers/job-offers.module": [
-		731,
-		5
+		736,
+		6
 	],
 	"../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers.module": [
-		733,
-		4
+		737,
+		5
 	],
 	"../pages/login/login.module": [
-		729,
-		3
+		738,
+		4
 	],
 	"../pages/refugees/refugees.module": [
-		735,
+		739,
+		3
+	],
+	"../pages/register/register.module": [
+		740,
 		2
 	],
 	"../pages/tabs/tabs.module": [
-		734,
+		741,
 		1
 	]
 };
@@ -620,179 +884,49 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 235;
+webpackAsyncContext.id = 239;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 332:
+/***/ 249:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__ = __webpack_require__(137);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__ = __webpack_require__(333);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__ = __webpack_require__(696);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular2_jwt___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular2_jwt__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__java_urls__ = __webpack_require__(141);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__user_service__ = __webpack_require__(335);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Utils_UserMapper__ = __webpack_require__(697);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
+/* harmony export (immutable) */ __webpack_exports__["a"] = UserMapper;
+/* harmony export (immutable) */ __webpack_exports__["b"] = userWrapper;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__entities_User__ = __webpack_require__(430);
 
-
-
-
-
-
-
-
-//import { Object } from 'core-js/library/web/timers';
-var AuthService = (function () {
-    function AuthService(http, userService, fb) {
-        this.http = http;
-        this.userService = userService;
-        this.fb = fb;
-        this.userLogged = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](false);
-        this.user = new __WEBPACK_IMPORTED_MODULE_2_rxjs_BehaviorSubject__["BehaviorSubject"](null);
-        this.lg = false;
-        this.token = "";
+function UserMapper(jsonUser) {
+    jsonUser = jsonUser.substr(1, jsonUser.length - 2);
+    var type = jsonUser.substr(0, jsonUser.indexOf(':'));
+    var user = UserFactory(type);
+    jsonUser = jsonUser.substr(jsonUser.indexOf(':') + 1);
+    var userImg = JSON.parse(jsonUser);
+    user = JSON.parse(jsonUser);
+    return user;
+}
+function setProperty(obj, key, value) {
+    obj[key] = value;
+}
+function UserFactory(typ) {
+    switch (typ) {
+        case "Admin": return new __WEBPACK_IMPORTED_MODULE_0__entities_User__["a" /* Admin */]();
+        case "CampChef": return new __WEBPACK_IMPORTED_MODULE_0__entities_User__["b" /* CampChef */]();
+        case "DistrictChef": return new __WEBPACK_IMPORTED_MODULE_0__entities_User__["c" /* DistrictChef */]();
+        case "Volunteer": return new __WEBPACK_IMPORTED_MODULE_0__entities_User__["d" /* Volunteer */]();
+        default: return null;
     }
-    AuthService.prototype.ngOnDestroy = function () {
-        this.subscr.unsubscribe();
-    };
-    AuthService.prototype.getToken = function () {
-        return localStorage.getItem('token');
-    };
-    AuthService.prototype.BasicAuth = function (login, psd) {
-        var _this = this;
-        this.http.get(__WEBPACK_IMPORTED_MODULE_5__java_urls__["a" /* LOGIN_URL */], {
-            headers: new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["d" /* HttpHeaders */]().set('Authorization', "Basic " + btoa(login + ':' + psd)),
-            observe: 'response',
-            responseType: 'text'
-        })
-            .subscribe(function (data) {
-            console.log(data);
-            var barear = data.headers.get('Authorization');
-            localStorage.setItem('token', barear);
-            localStorage.setItem('cmode', 'Basic');
-            var paylod = __WEBPACK_IMPORTED_MODULE_4_angular2_jwt__["JwtHelper"].prototype.decodeToken(barear);
-            localStorage.setItem('role', paylod.role);
-            _this.userLogged.next(true);
-            _this.userService.getMe().subscribe(function (u) {
-                var temp = JSON.stringify(u);
-                var myuser = Object(__WEBPACK_IMPORTED_MODULE_7__Utils_UserMapper__["a" /* UserMapper */])(temp);
-                _this.user.next(myuser);
-                _this.lg = true;
-            });
-        });
-    };
-    AuthService.prototype.FaceBookAuth = function () {
-        var _this = this;
-        this.fb.login(['email,public_profile,user_photos,user_birthday'])
-            .then(function (res) {
-            if (res.status === "connected") {
-                _this.lg = true;
-                _this.token = res.authResponse.accessToken;
-            }
-            else {
-                _this.lg = false;
-            }
-        })
-            .catch(function (e) { return console.log('Error logging into Facebook', e); });
-    };
-    AuthService.prototype.GoogleAuth = function () {
-    };
-    AuthService.prototype.isAuthenticated = function () {
-        return this.lg;
-    };
-    AuthService.prototype.LogOut = function () {
-        this.user.next(null);
-        this.userLogged.next(false);
-        localStorage.clear();
-        this.lg = false;
-    };
-    AuthService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_6__user_service__["a" /* UserService */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */]])
-    ], AuthService);
-    return AuthService;
-}());
-
-//# sourceMappingURL=auth.service.js.map
+}
+function userWrapper(typ, json) {
+    var jsonStr = JSON.stringify(json);
+    return "{\"" + typ + "\":" + jsonStr + "}";
+}
+//# sourceMappingURL=UserMapper.js.map
 
 /***/ }),
 
-/***/ 335:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__java_urls__ = __webpack_require__(141);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__(46);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var UserService = (function () {
-    function UserService(http) {
-        this.http = http;
-    }
-    UserService.prototype.getMe = function () {
-        return this.http.get(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */] + '/me');
-    };
-    UserService.prototype.getUsers = function () {
-        this.http.get(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */], { responseType: 'text' }).subscribe(function (data) {
-            console.log(JSON.parse(data));
-        });
-    };
-    UserService.prototype.getUser = function (id) {
-        this.http.get(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */] + '/' + id, { responseType: 'text' }).subscribe(function (data) {
-            console.log(JSON.parse(data));
-        });
-    };
-    UserService.prototype.postUser = function (str) {
-        console.log("start user post");
-        var tmp = { "Volunteer": { "disable": false, "email": "mohamad.khreibi@esprit.tn", "firstName": "test", "lastName": "test", "password": "123456" } };
-        console.log(JSON.parse(str));
-        this.http.post(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */], JSON.parse(str)).subscribe(function (e) { return console.log("++++"); }, function (err) { return console.log(err); });
-        console.log("user post end");
-    };
-    UserService.prototype.putUser = function (user) {
-        console.log(JSON.parse(user));
-        this.http.put(__WEBPACK_IMPORTED_MODULE_1__java_urls__["b" /* USERS_URL */], JSON.parse(user), { responseType: 'text' }).subscribe(function (data) { return console.log(data); });
-    };
-    UserService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_common_http__["b" /* HttpClient */]])
-    ], UserService);
-    return UserService;
-}());
-
-//# sourceMappingURL=user.service.js.map
-
-/***/ }),
-
-/***/ 336:
+/***/ 338:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -830,13 +964,13 @@ var RefugeesService = (function () {
 
 /***/ }),
 
-/***/ 388:
+/***/ 390:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(389);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(393);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(391);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(395);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -844,7 +978,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 393:
+/***/ 395:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -852,38 +986,40 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(376);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(377);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_facebook__ = __webpack_require__(333);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(716);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_http__ = __webpack_require__(126);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_native_geocoder__ = __webpack_require__(717);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_home_home__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__agm_core__ = __webpack_require__(378);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__agm_snazzy_info_window__ = __webpack_require__(722);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(378);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(379);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_facebook__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(721);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_http__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_native_geocoder__ = __webpack_require__(722);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__pages_home_home__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__agm_core__ = __webpack_require__(380);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__agm_snazzy_info_window__ = __webpack_require__(727);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__pages_job_offer_page_group_job_offers_job_offers__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_tabs_tabs__ = __webpack_require__(90);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_joboffer_service__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pages_tabs_tabs__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_joboffer_service__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__angular_common_http__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_job_offer_page_group_job_offer_job_offer__ = __webpack_require__(175);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_login_login__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_job_offer_page_group_job_offer_add_job_offer_add__ = __webpack_require__(176);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_job_offer_page_group_refugee_list_job_offers_refugee_list_job_offers__ = __webpack_require__(177);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pages_refugees_refugees__ = __webpack_require__(178);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_refugees_service__ = __webpack_require__(336);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_course_group_course_course__ = __webpack_require__(88);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_course_group_courses_courses__ = __webpack_require__(174);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pages_course_group_add_course_add_course__ = __webpack_require__(172);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_job_offer_page_group_job_offer_job_offer__ = __webpack_require__(179);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_login_login__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_job_offer_page_group_job_offer_add_job_offer_add__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_job_offer_page_group_refugee_list_job_offers_refugee_list_job_offers__ = __webpack_require__(180);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pages_refugees_refugees__ = __webpack_require__(182);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_refugees_service__ = __webpack_require__(338);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_course_group_course_course__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__pages_course_group_courses_courses__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__pages_course_group_add_course_add_course__ = __webpack_require__(175);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__services_course_service__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_user_service__ = __webpack_require__(335);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_auth_service__ = __webpack_require__(332);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__security_jwt_interceptor__ = __webpack_require__(724);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_user_service__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_auth_service__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__security_jwt_interceptor__ = __webpack_require__(729);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pages_register_register__ = __webpack_require__(181);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -930,7 +1066,8 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_20__pages_refugees_refugees__["a" /* RefugeesPage */],
                 __WEBPACK_IMPORTED_MODULE_22__pages_course_group_course_course__["a" /* CoursePage */],
                 __WEBPACK_IMPORTED_MODULE_23__pages_course_group_courses_courses__["a" /* CoursesPage */],
-                __WEBPACK_IMPORTED_MODULE_24__pages_course_group_add_course_add_course__["a" /* AddCoursePage */]
+                __WEBPACK_IMPORTED_MODULE_24__pages_course_group_add_course_add_course__["a" /* AddCoursePage */],
+                __WEBPACK_IMPORTED_MODULE_29__pages_register_register__["a" /* RegisterPage */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -938,16 +1075,17 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* IonicModule */].forRoot(__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* MyApp */], {}, {
                     links: [
                         { loadChildren: '../pages/course-group/add-course/add-course.module#AddCoursePageModule', name: 'AddCoursePage', segment: 'add-course', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/course-group/course/course.module#CoursePageModule', name: 'CoursePage', segment: 'course', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/course-group/courses/courses.module#CoursesPageModule', name: 'CoursesPage', segment: 'courses', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/home/home.module#HomePageModule', name: 'HomePage', segment: 'home', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-offer-page-group/job-offer-add/job-offer-add.module#JobOfferAddPageModule', name: 'JobOfferAddPage', segment: 'job-offer-add', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/job-offer-page-group/job-offers/job-offers.module#JobOffersPageModule', name: 'JobOffersPage', segment: 'job-offers', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-offer-page-group/job-offer/job-offer.module#JobOfferPageModule', name: 'JobOfferPage', segment: 'job-offer', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/job-offer-page-group/job-offers/job-offers.module#JobOffersPageModule', name: 'JobOffersPage', segment: 'job-offers', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/job-offer-page-group/refugee-list-job-offers/refugee-list-job-offers.module#RefugeeListJobOffersPageModule', name: 'RefugeeListJobOffersPage', segment: 'refugee-list-job-offers', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/refugees/refugees.module#RefugeesPageModule', name: 'RefugeesPage', segment: 'refugees', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/refugees/refugees.module#RefugeesPageModule', name: 'RefugeesPage', segment: 'refugees', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/register/register.module#RegisterPageModule', name: 'RegisterPage', segment: 'register', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/tabs/tabs.module#TabsPageModule', name: 'TabsPage', segment: 'tabs', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_10__agm_core__["a" /* AgmCoreModule */].forRoot({
@@ -969,7 +1107,8 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_20__pages_refugees_refugees__["a" /* RefugeesPage */],
                 __WEBPACK_IMPORTED_MODULE_22__pages_course_group_course_course__["a" /* CoursePage */],
                 __WEBPACK_IMPORTED_MODULE_23__pages_course_group_courses_courses__["a" /* CoursesPage */],
-                __WEBPACK_IMPORTED_MODULE_24__pages_course_group_add_course_add_course__["a" /* AddCoursePage */]
+                __WEBPACK_IMPORTED_MODULE_24__pages_course_group_add_course_add_course__["a" /* AddCoursePage */],
+                __WEBPACK_IMPORTED_MODULE_29__pages_register_register__["a" /* RegisterPage */]
             ],
             providers: [
                 {
@@ -986,7 +1125,7 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_25__services_course_service__["a" /* CourseService */],
                 __WEBPACK_IMPORTED_MODULE_27__services_auth_service__["a" /* AuthService */],
                 __WEBPACK_IMPORTED_MODULE_26__services_user_service__["a" /* UserService */],
-                __WEBPACK_IMPORTED_MODULE_5__ionic_native_facebook__["a" /* Facebook */]
+                __WEBPACK_IMPORTED_MODULE_5__ionic_native_facebook__["a" /* Facebook */],
             ]
         })
     ], AppModule);
@@ -997,7 +1136,7 @@ var AppModule = (function () {
 
 /***/ }),
 
-/***/ 413:
+/***/ 415:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1019,73 +1158,7 @@ var Course = (function () {
 
 /***/ }),
 
-/***/ 692:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Joboffer; });
-var Joboffer = (function () {
-    function Joboffer(description, begindate, enddate, contactnumber, fieldOfWork, salaryEstimate, companyName, companyAdress, contactEmail, contactName, title, districtchef, campchef, id) {
-        this.description = description;
-        this.begindate = begindate;
-        this.enddate = enddate;
-        this.contactnumber = contactnumber;
-        this.fieldOfWork = fieldOfWork;
-        this.salaryEstimate = salaryEstimate;
-        this.companyName = companyName;
-        this.companyAdress = companyAdress;
-        this.contactEmail = contactEmail;
-        this.contactName = contactName;
-        this.title = title;
-        this.districtchef = districtchef;
-        this.campchef = campchef;
-        this.id = id;
-    }
-    return Joboffer;
-}());
-
-//# sourceMappingURL=joboffer.js.map
-
-/***/ }),
-
-/***/ 697:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = UserMapper;
-/* unused harmony export userWrapper */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__entities_User__ = __webpack_require__(698);
-
-function UserMapper(jsonUser) {
-    jsonUser = jsonUser.substr(1, jsonUser.length - 2);
-    var type = jsonUser.substr(0, jsonUser.indexOf(':'));
-    var user = UserFactory(type);
-    jsonUser = jsonUser.substr(jsonUser.indexOf(':') + 1);
-    var userImg = JSON.parse(jsonUser);
-    user = JSON.parse(jsonUser);
-    return user;
-}
-function setProperty(obj, key, value) {
-    obj[key] = value;
-}
-function UserFactory(typ) {
-    switch (typ) {
-        case "Admin": return new __WEBPACK_IMPORTED_MODULE_0__entities_User__["a" /* Admin */]();
-        case "CampChef": return new __WEBPACK_IMPORTED_MODULE_0__entities_User__["b" /* CampChef */]();
-        case "DistrictChef": return new __WEBPACK_IMPORTED_MODULE_0__entities_User__["c" /* DistrictChef */]();
-        case "Volunteer": return new __WEBPACK_IMPORTED_MODULE_0__entities_User__["d" /* Volunteer */]();
-        default: return null;
-    }
-}
-function userWrapper(typ, json) {
-    var jsonStr = JSON.stringify(json);
-    return "{\"" + typ + "\":" + jsonStr + "}";
-}
-//# sourceMappingURL=UserMapper.js.map
-
-/***/ }),
-
-/***/ 698:
+/***/ 430:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1218,20 +1291,155 @@ var Volunteer = (function (_super) {
 
 /***/ }),
 
-/***/ 716:
+/***/ 431:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Joboffer; });
+var Joboffer = (function () {
+    function Joboffer(description, begindate, enddate, contactnumber, fieldOfWork, salaryEstimate, companyName, companyAdress, contactEmail, contactName, title, districtchef, campchef, id) {
+        this.description = description;
+        this.begindate = begindate;
+        this.enddate = enddate;
+        this.contactnumber = contactnumber;
+        this.fieldOfWork = fieldOfWork;
+        this.salaryEstimate = salaryEstimate;
+        this.companyName = companyName;
+        this.companyAdress = companyAdress;
+        this.contactEmail = contactEmail;
+        this.contactName = contactName;
+        this.title = title;
+        this.districtchef = districtchef;
+        this.campchef = campchef;
+        this.id = id;
+    }
+    return Joboffer;
+}());
+
+//# sourceMappingURL=joboffer.js.map
+
+/***/ }),
+
+/***/ 62:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_facebook__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__tabs_tabs__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__register_register__ = __webpack_require__(181);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_auth_service__ = __webpack_require__(126);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+/**
+ * Generated class for the LoginPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var LoginPage = (function () {
+    function LoginPage(authService, nav, viewCtrl, platform, http, fb) {
+        this.authService = authService;
+        this.nav = nav;
+        this.viewCtrl = viewCtrl;
+        this.platform = platform;
+        this.http = http;
+        this.fb = fb;
+        this.submitted = false;
+        this.platform = platform;
+        platform.ready().then(function () {
+        });
+    }
+    LoginPage.prototype.ionViewWillEnter = function () {
+        var _this = this;
+        this.subscription = this.authService.userLogged.subscribe(function (isConnected) {
+            _this.connected = isConnected;
+        });
+        this.userSub = this.authService.user.subscribe(function (u) {
+            _this.user = u;
+            console.log("jasgzdfsdf");
+        });
+    };
+    LoginPage.prototype.ionViewDidLeave = function () {
+        this.subscription.unsubscribe();
+        this.userSub.unsubscribe();
+    };
+    LoginPage.prototype.onSubmit = function () {
+        this.submitted = true;
+        this.authService.BasicAuth(this.login, this.password);
+        this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_4__tabs_tabs__["a" /* TabsPage */]);
+    };
+    LoginPage.prototype.onFacebook = function () {
+        try {
+            if (this.platform.is('cordova')) {
+                return this.fb.login(['email,public_profile,user_photos,user_birthday']).then(function (success) {
+                    console.log("facebook login success", success);
+                    return success;
+                }, function (error) {
+                    console.log("facebook error login", error);
+                    return error;
+                });
+            }
+            else {
+                return Promise.reject("Please run me on a device");
+            }
+        }
+        catch (error) {
+            console.log(error);
+            return Promise.reject(error);
+        }
+    };
+    LoginPage.prototype.onGoogle = function () {
+        this.authService.GoogleAuth();
+        this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_4__tabs_tabs__["a" /* TabsPage */]);
+    };
+    LoginPage.prototype.register = function () {
+        this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_5__register_register__["a" /* RegisterPage */]);
+    };
+    LoginPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-login',template:/*ion-inline-start:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\login\login.html"*/'<!--\n\n  Generated template for the LoginPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n    <ion-title text-center>Refugees Camp</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content text-center padding>\n\n  <ion-list>\n\n  <img block class="mTopAndWidth" text-center src="assets/imgs/logoRC.png"/>\n\n\n\n    <ion-item>\n\n      <ion-label floating>Username</ion-label>\n\n      <ion-input [(ngModel)]="login" type="text" value=""></ion-input>\n\n    </ion-item>\n\n\n\n    <ion-item>\n\n      <ion-label floating>Password</ion-label>\n\n      <ion-input [(ngModel)]="password"  type="password" value=""></ion-input>\n\n    </ion-item>\n\n\n\n\n\n\n\n  </ion-list>\n\n  <div padding text-center>\n\n    <button ion-button outline primary  large  (click)="onSubmit()">Sign In</button>\n\n  </div>\n\n\n\n\n\n  <div padding text-center>\n\n    <button ion-button outline primary  large  (click)="register()">Join us</button>\n\n  </div>\n\n  \n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\login\login.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__services_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */], __WEBPACK_IMPORTED_MODULE_3__angular_http__["Http"], __WEBPACK_IMPORTED_MODULE_2__ionic_native_facebook__["a" /* Facebook */]])
+    ], LoginPage);
+    return LoginPage;
+}());
+
+//# sourceMappingURL=login.js.map
+
+/***/ }),
+
+/***/ 721:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_refugees_refugees__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_refugees_refugees__ = __webpack_require__(182);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__ = __webpack_require__(377);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__ = __webpack_require__(376);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_tabs_tabs__ = __webpack_require__(90);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_login_login__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__ = __webpack_require__(379);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_splash_screen__ = __webpack_require__(378);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_tabs_tabs__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_login_login__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_job_offer_page_group_job_offers_job_offers__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_course_group_course_course__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_course_group_course_course__ = __webpack_require__(90);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1286,13 +1494,59 @@ var MyApp = (function () {
 
 /***/ }),
 
-/***/ 72:
+/***/ 729:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return jwtInterceptor; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_java_urls__ = __webpack_require__(131);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var jwtInterceptor = (function () {
+    function jwtInterceptor() {
+    }
+    jwtInterceptor.prototype.getToken = function () {
+        return localStorage.getItem('token');
+    };
+    jwtInterceptor.prototype.intercept = function (request, next) {
+        console.log('intercept');
+        if (request.url != __WEBPACK_IMPORTED_MODULE_1__services_java_urls__["a" /* LOGIN_URL */] && this.getToken() != null) {
+            request = request.clone({
+                setHeaders: {
+                    Authorization: this.getToken()
+                }
+            });
+        }
+        return next.handle(request);
+    };
+    jwtInterceptor = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], jwtInterceptor);
+    return jwtInterceptor;
+}());
+
+//# sourceMappingURL=jwt.interceptor.js.map
+
+/***/ }),
+
+/***/ 75:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobofferService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__(414);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__(432);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
@@ -1373,53 +1627,7 @@ var JobofferService = (function () {
 
 /***/ }),
 
-/***/ 724:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return jwtInterceptor; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_java_urls__ = __webpack_require__(141);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var jwtInterceptor = (function () {
-    function jwtInterceptor() {
-    }
-    jwtInterceptor.prototype.getToken = function () {
-        return localStorage.getItem('token');
-    };
-    jwtInterceptor.prototype.intercept = function (request, next) {
-        console.log('intercept');
-        if (request.url != __WEBPACK_IMPORTED_MODULE_1__services_java_urls__["a" /* LOGIN_URL */] && this.getToken() != null) {
-            request = request.clone({
-                setHeaders: {
-                    Authorization: this.getToken()
-                }
-            });
-        }
-        return next.handle(request);
-    };
-    jwtInterceptor = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [])
-    ], jwtInterceptor);
-    return jwtInterceptor;
-}());
-
-//# sourceMappingURL=jwt.interceptor.js.map
-
-/***/ }),
-
-/***/ 88:
+/***/ 90:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1427,8 +1635,8 @@ var jwtInterceptor = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_course_service__ = __webpack_require__(122);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__add_course_add_course__ = __webpack_require__(172);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__courses_courses__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__add_course_add_course__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__courses_courses__ = __webpack_require__(176);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1502,154 +1710,6 @@ var CoursePage = (function () {
 
 /***/ }),
 
-/***/ 89:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_facebook__ = __webpack_require__(333);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(126);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__tabs_tabs__ = __webpack_require__(90);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_auth_service__ = __webpack_require__(332);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-var LoginPage = (function () {
-    function LoginPage(authService, nav, viewCtrl, platform, http, fb) {
-        this.authService = authService;
-        this.nav = nav;
-        this.viewCtrl = viewCtrl;
-        this.platform = platform;
-        this.http = http;
-        this.fb = fb;
-        this.submitted = false;
-        this.platform = platform;
-        platform.ready().then(function () {
-        });
-    }
-    LoginPage.prototype.ionViewWillEnter = function () {
-        var _this = this;
-        this.subscription = this.authService.userLogged.subscribe(function (isConnected) {
-            _this.connected = isConnected;
-        });
-        this.userSub = this.authService.user.subscribe(function (u) {
-            _this.user = u;
-            console.log("jasgzdfsdf");
-        });
-    };
-    LoginPage.prototype.ionViewDidLeave = function () {
-        this.subscription.unsubscribe();
-        this.userSub.unsubscribe();
-    };
-    LoginPage.prototype.onSubmit = function () {
-        this.submitted = true;
-        this.authService.BasicAuth(this.login, this.password);
-        this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_4__tabs_tabs__["a" /* TabsPage */]);
-    };
-    LoginPage.prototype.onFacebook = function () {
-        try {
-            if (this.platform.is('cordova')) {
-                return this.fb.login(['email,public_profile,user_photos,user_birthday']).then(function (success) {
-                    console.log("facebook login success", success);
-                    return success;
-                }, function (error) {
-                    console.log("facebook error login", error);
-                    return error;
-                });
-            }
-            else {
-                return Promise.reject("Please run me on a device");
-            }
-        }
-        catch (error) {
-            console.log(error);
-            return Promise.reject(error);
-        }
-    };
-    LoginPage.prototype.onGoogle = function () {
-        this.authService.GoogleAuth();
-        this.nav.setRoot(__WEBPACK_IMPORTED_MODULE_4__tabs_tabs__["a" /* TabsPage */]);
-    };
-    LoginPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-login',template:/*ion-inline-start:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\login\login.html"*/'<!--\n\n  Generated template for the LoginPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n\n\n  <ion-navbar>\n\n    <ion-title text-center>Refugees Camp</ion-title>\n\n  </ion-navbar>\n\n\n\n</ion-header>\n\n\n\n\n\n<ion-content text-center padding>\n\n  <ion-list>\n\n  <img block class="mTopAndWidth" text-center src="assets/imgs/logoRC.png"/>\n\n\n\n    <ion-item>\n\n      <ion-label floating>Username</ion-label>\n\n      <ion-input [(ngModel)]="login" type="text" value=""></ion-input>\n\n    </ion-item>\n\n\n\n    <ion-item>\n\n      <ion-label floating>Password</ion-label>\n\n      <ion-input [(ngModel)]="password"  type="password" value=""></ion-input>\n\n    </ion-item>\n\n\n\n\n\n\n\n  </ion-list>\n\n  <div padding text-center>\n\n    <button ion-button outline primary  large  (click)="onSubmit()">Sign In</button>\n\n  </div>\n\n\n\n  <div padding text-center>\n\n    <ion-icon name="logo-facebook" (click)="onFacebook()"></ion-icon>\n\n  </div>\n\n\n\n  <div padding text-center>\n\n    <button ion-button outline primary  large  (click)="onGoogle()">Google</button>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\login\login.html"*/,
-        }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__services_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_auth_service__["a" /* AuthService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* ViewController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* Platform */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3__angular_http__["Http"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_http__["Http"]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_native_facebook__["a" /* Facebook */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_native_facebook__["a" /* Facebook */]) === "function" && _f || Object])
-    ], LoginPage);
-    return LoginPage;
-    var _a, _b, _c, _d, _e, _f;
-}());
-
-//# sourceMappingURL=login.js.map
-
-/***/ }),
-
-/***/ 90:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__home_home__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__job_offer_page_group_job_offers_job_offers__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_login__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__course_group_course_course__ = __webpack_require__(88);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-
-
-
-
-
-/**
- * Generated class for the TabsPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-var TabsPage = (function () {
-    function TabsPage() {
-        this.joboffersPage = __WEBPACK_IMPORTED_MODULE_2__job_offer_page_group_job_offers_job_offers__["a" /* JobOffersPage */];
-        this.homePage = __WEBPACK_IMPORTED_MODULE_1__home_home__["a" /* HomePage */];
-        this.loginPage = __WEBPACK_IMPORTED_MODULE_3__login_login__["a" /* LoginPage */];
-        this.coursesPage = __WEBPACK_IMPORTED_MODULE_4__course_group_course_course__["a" /* CoursePage */];
-    }
-    TabsPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-            selector: 'page-tabs',template:/*ion-inline-start:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\tabs\tabs.html"*/'\n\n<ion-tabs>\n\n\n\n  <ion-tab [root]="homePage" tabTitle="Home" tabIcon="book"></ion-tab>\n\n  <!-- add this here to navigate [root]="joboffersPage"-->\n\n  <ion-tab  tabTitle="Events" tabIcon="briefcase"></ion-tab>\n\n</ion-tabs>\n\n'/*ion-inline-end:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\tabs\tabs.html"*/,
-        })
-    ], TabsPage);
-    return TabsPage;
-}());
-
-//# sourceMappingURL=tabs.js.map
-
-/***/ }),
-
 /***/ 91:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1657,10 +1717,10 @@ var TabsPage = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JobOffersPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_joboffer_service__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__job_offer_job_offer__ = __webpack_require__(175);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__job_offer_add_job_offer_add__ = __webpack_require__(176);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__refugee_list_job_offers_refugee_list_job_offers__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_joboffer_service__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__job_offer_job_offer__ = __webpack_require__(179);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__job_offer_add_job_offer_add__ = __webpack_require__(178);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__refugee_list_job_offers_refugee_list_job_offers__ = __webpack_require__(180);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1746,7 +1806,53 @@ var JobOffersPage = (function () {
 
 //# sourceMappingURL=job-offers.js.map
 
+/***/ }),
+
+/***/ 92:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__home_home__ = __webpack_require__(177);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__job_offer_page_group_job_offers_job_offers__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_login__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__course_group_course_course__ = __webpack_require__(90);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+/**
+ * Generated class for the TabsPage page.
+ *
+ * See http://ionicframework.com/docs/components/#navigation for more info
+ * on Ionic pages and navigation.
+ */
+var TabsPage = (function () {
+    function TabsPage() {
+        this.joboffersPage = __WEBPACK_IMPORTED_MODULE_2__job_offer_page_group_job_offers_job_offers__["a" /* JobOffersPage */];
+        this.homePage = __WEBPACK_IMPORTED_MODULE_1__home_home__["a" /* HomePage */];
+        this.loginPage = __WEBPACK_IMPORTED_MODULE_3__login_login__["a" /* LoginPage */];
+        this.coursesPage = __WEBPACK_IMPORTED_MODULE_4__course_group_course_course__["a" /* CoursePage */];
+    }
+    TabsPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-tabs',template:/*ion-inline-start:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\tabs\tabs.html"*/'\n\n<ion-tabs>\n\n\n\n  <ion-tab [root]="homePage" tabTitle="Home" tabIcon="book"></ion-tab>\n\n  <!-- add this here to navigate [root]="joboffersPage"-->\n\n  <ion-tab  tabTitle="Events" tabIcon="briefcase"></ion-tab>\n\n</ion-tabs>\n\n'/*ion-inline-end:"C:\Users\azgar\Desktop\Refugees-camp-Ionic\src\pages\tabs\tabs.html"*/,
+        })
+    ], TabsPage);
+    return TabsPage;
+}());
+
+//# sourceMappingURL=tabs.js.map
+
 /***/ })
 
-},[388]);
+},[390]);
 //# sourceMappingURL=main.js.map

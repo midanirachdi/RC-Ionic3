@@ -5,6 +5,8 @@ import { Facebook } from '@ionic-native/facebook';
 import {Http} from "@angular/http";
 import {HomePage} from "../home/home";
 import {TabsPage} from "../tabs/tabs";
+import {RegisterPage} from "../register/register";
+
 import {JobOffersPage} from "../job-offer-page-group/job-offers/job-offers";
 import {User,Admin,CampChef,DistrictChef,Volunteer} from '../../entities/User'
 import {AuthService} from '../../services/auth.service';
@@ -94,6 +96,10 @@ onFacebook(){
 onGoogle(){
   this.authService.GoogleAuth();
   this.nav.setRoot(TabsPage);
+}
+
+register(){
+  this.nav.setRoot(RegisterPage);
 }
 
 
