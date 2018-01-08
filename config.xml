@@ -78,6 +78,7 @@
     </platform>
     <allow-navigation href="http://192.168.100.107:8100" />
     <allow-navigation href="http://172.16.206.45:8100" />
+    <allow-navigation href="http://172.16.56.8:8100" />
     <engine name="android" spec="~6.3.0" />
     <engine name="ios" spec="~4.5.4" />
     <plugin name="cordova-plugin-nativegeocoder" spec="^2.0.4">
@@ -92,5 +93,4 @@
         <variable name="APP_ID" value="170197633567661" />
         <variable name="APP_NAME" value="refugees-camp - Test1" />
     </plugin>
-    <allow-navigation href="http://172.16.56.8:8100" />
 </widget>

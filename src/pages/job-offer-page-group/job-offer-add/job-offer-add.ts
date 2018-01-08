@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Joboffer} from "../../../entities/joboffer";
 import {DatePipe} from "@angular/common";
 import {JobofferService} from "../../../services/joboffer.service";
+import {JobOffersPage} from "../job-offers/job-offers";
 
 /**
  * Generated class for the JobOfferAddPage page.
@@ -27,7 +28,6 @@ export class JobOfferAddPage {
                private jobofferService:JobofferService,
                public viewCtrl:ViewController
   ) {
-
     this.jobofferForm = this.formBuilder.group({
       title: ['', Validators.required],
       contactN: ['', Validators.required],
@@ -41,8 +41,8 @@ export class JobOfferAddPage {
       fow: ['', Validators.required],
       salaryE: ['', Validators.required]
     });
-
   }
+
 
   ionViewDidLoad() {
    // console.log('ionViewDidLoad JobOfferAddPage');
@@ -69,11 +69,13 @@ export class JobOfferAddPage {
         }
       );
     this.jobofferService.jobOfferAdded.emit(newJobOffer);
-    this.viewCtrl.dismiss(false);
+    this.navCtrl.popTo(JobOffersPage);
+    //this.viewCtrl.dismiss(false);
 
 
   }
   onClose(remove=false) {
     this.viewCtrl.dismiss(remove);
+
   }
 }

@@ -56,7 +56,7 @@ import { AddnewsPage } from '../pages/news/addnews/addnews';
     CoursePage,
     CoursesPage,
     AddCoursePage,
-    RegisterPage
+    RegisterPage,
     EvenementsPage,
     NewsPage,
     AddnewsPage
@@ -87,7 +87,7 @@ import { AddnewsPage } from '../pages/news/addnews/addnews';
     CoursePage,
     CoursesPage,
     AddCoursePage,
-    RegisterPage
+    RegisterPage,
     EvenementsPage,
     NewsPage,
     AddnewsPage
@@ -106,7 +106,7 @@ import { AddnewsPage } from '../pages/news/addnews/addnews';
     RefugeesService,
     CourseService,
     EvenementService,
-    NewsService
+    NewsService,
     AuthService,
     UserService,
     Facebook,
